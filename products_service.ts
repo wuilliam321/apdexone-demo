@@ -17,7 +17,7 @@ export class CreateProductRequest {
 }
 
 export interface IProductsDatasource {
-  add(product: Product): Product
+  add(product: Product): [Product?, Error?]
 }
 
 export interface IProductsService {
@@ -38,9 +38,12 @@ class ProductsService implements IProductsService {
     }
 
     const product = new Product(0, req.name, req.price);
-    // TODO: what if there is an error
-    const result = this.productsDS.add(product);
-    const response = { id: result.id, };
+    const [result, error] = this.productsDS.add(product);
+    if (error) {
+      return [undefined, error];
+    }
+
+    const response = { id: result!.id, };
 
     return [ response, undefined];
   }

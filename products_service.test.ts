@@ -1,10 +1,16 @@
-import ProductsService from './products_service';
+import ProductsService, { IProductsDatasource, IProductsService } from './products_service';
 import ProductsDatasource from './products_datasource';
-
-const ds = new ProductsDatasource();
-const productsService = new ProductsService(ds);
+import { Product } from './models';
 
 describe("Products", () => {
+  let ds: IProductsDatasource;
+  let productsService: IProductsService;
+
+  beforeEach(() => {
+    ds = new ProductsDatasource();
+    productsService = new ProductsService(ds);
+  });
+
   test("create", () => {
     const [responseOne] = productsService.create({
       name: "iPhone",
@@ -33,5 +39,18 @@ describe("Products", () => {
     });
     expect(error).toBeInstanceOf(Error);
   });
-  // TODO: given an error while adding a product, should return error
+
+  test("given an error in datasource while saving product, should return error", () => {
+    ds = {
+      add(_product: Product): [Product?, Error?] {
+        return [undefined, new Error("error")];
+      }
+    }
+    productsService = new ProductsService(ds);
+    const [_, error] = productsService.create({
+      name: "A good name",
+      price: 99,
+    });
+    expect(error).toBeInstanceOf(Error);
+  });
 });

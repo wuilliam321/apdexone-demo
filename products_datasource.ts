@@ -1,17 +1,18 @@
 import { Product } from './models';
+import { IProductsDatasource } from './products_service';
 
-class ProductsDatasource {
+class ProductsDatasource implements IProductsDatasource {
   productCounter = 0;
   constructor() {
   }
 
-  add(product: Product): Product {
+  add(product: Product): [Product?, Error?] {
     this.productCounter++;
-    return {
+    return [{
       id: this.productCounter,
       name: product.name,
       price: product.price,
-    };
+    }, undefined];
   }
 }
 
