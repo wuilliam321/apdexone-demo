@@ -1,37 +1,38 @@
-// Models
-class Product {
-  name: string;
-  price: number;
-  constructor(name: string, price: number) {
-    this.name = name;
-    this.price = price;
-  }
-}
+import ProductsService from './products_service';
+import ProductsDatasource from './products_datasource';
 
-class CreateProductResponse {
-  id: number;
-  constructor(id: number) {
-    this.id = id;
-  }
-}
-
-class CreateProductRequest {
-  constructor(product: Product) {
-  }
-}
-
-function create(req: CreateProductRequest): CreateProductResponse {
-  return {
-    id: 1,
-  };
-}
+const productsService = new ProductsService(new ProductsDatasource());
 
 describe("Products", () => {
   test("create", () => {
     // Create product API
-    const product = new Product("iPhone", 1000);
-    const req = new CreateProductRequest(product);
-    const res = create(req);
-    expect(res.id).toBe(1);
+    const [responseOne] = productsService.create({
+      name: "iPhone",
+      price: 1000,
+    });
+    expect(responseOne!.id).toBe(1);
+    const [responseTwo] = productsService.create({
+      name: "a product",
+      price: 200,
+    });
+    expect(responseTwo!.id).toBe(2);
+  });
+
+  test("given an invalid name, should return error", () => {
+    // Create product API
+    const [_, error] = productsService.create({
+      name: "",
+      price: 1000,
+    });
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  test("given an invalid price, should return error", () => {
+    // Create product API
+    const [_, error] = productsService.create({
+      name: "A good name",
+      price: 0,
+    });
+    expect(error).toBeInstanceOf(Error);
   });
 });

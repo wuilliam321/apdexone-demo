@@ -1,5 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import ProductsHttp from './products_http';
+import ProductsService from './products_service';
+import ProductsDatasource from './products_datasource';
 
 dotenv.config();
 
@@ -27,6 +30,9 @@ const port = process.env.PORT || 3000;
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
+
+const productsHttp = new ProductsHttp(new ProductsService(new ProductsDatasource()));
+app.post('/products', productsHttp.handleCreateProduct);
 
 app.listen(port, () => {
   console.log(`[server]: running at http://localhost:${port}`);
