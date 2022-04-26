@@ -1,11 +1,11 @@
 import ProductsService from './products_service';
 import ProductsDatasource from './products_datasource';
 
-const productsService = new ProductsService(new ProductsDatasource());
+const ds = new ProductsDatasource();
+const productsService = new ProductsService(ds);
 
 describe("Products", () => {
   test("create", () => {
-    // Create product API
     const [responseOne] = productsService.create({
       name: "iPhone",
       price: 1000,
@@ -19,7 +19,6 @@ describe("Products", () => {
   });
 
   test("given an invalid name, should return error", () => {
-    // Create product API
     const [_, error] = productsService.create({
       name: "",
       price: 1000,
@@ -28,11 +27,11 @@ describe("Products", () => {
   });
 
   test("given an invalid price, should return error", () => {
-    // Create product API
     const [_, error] = productsService.create({
       name: "A good name",
       price: 0,
     });
     expect(error).toBeInstanceOf(Error);
   });
+  // TODO: given an error while adding a product, should return error
 });

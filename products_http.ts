@@ -1,27 +1,39 @@
 import { Request, Response } from 'express';
-import ProductsService, { CreateProductRequest } from './products_service';
+import { CreateProductRequest, IProductsService } from './products_service';
 
 class ProductsHttp {
-  constructor(private productsService: ProductsService) {}
+  constructor(private productsService: IProductsService) { }
 
-  handleCreateProduct(req: Request, res: Response) {
-    if (!req.body) {
-      res.send("body is required");
-      return;
-    }
+  handleCreateProduct(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      if (!req.body) {
+        res.status(400).send('body is required');
+        return;
+      }
 
-    const body: CreateProductRequest = {
+      if (!req.body.name) {
+        res.status(400).send('name is required');
+        return;
+      }
+
+      if (!req.body.price || req.body.price <= 0) {
+        res.status(400).send('price is required');
+        return;
+      }
+
+      const body: CreateProductRequest = {
         name: req.body.name,
         price: req.body.price,
-    }
+      }
 
-    const [result, error] = this.productsService.create(body);
-    if (error) {
-      res.send(error);
-      return;
-    }
+      const [result, error] = this.productsService.create(body);
+      if (error) {
+        res.status(500).send(error);
+        return;
+      }
 
-    res.send(result);
+      res.status(201).send(result);
+    }
   }
 }
 

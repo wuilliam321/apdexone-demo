@@ -6,7 +6,12 @@ import ProductsDatasource from './products_datasource';
 
 dotenv.config();
 
+const ds = new ProductsDatasource();
+const service = new ProductsService(ds);
+const productsHttp = new ProductsHttp(service);
+
 const app: Express = express();
+app.use(express.json())
 const port = process.env.PORT || 3000;
 
 // [] health check
@@ -31,7 +36,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-const productsHttp = new ProductsHttp(new ProductsService(new ProductsDatasource()));
 app.post('/products', productsHttp.handleCreateProduct);
 
 app.listen(port, () => {

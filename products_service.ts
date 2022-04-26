@@ -16,11 +16,15 @@ export class CreateProductRequest {
   }
 }
 
-interface IProductsDatasource {
+export interface IProductsDatasource {
   add(product: Product): Product
 }
 
-class ProductsService {
+export interface IProductsService {
+  create(req: CreateProductRequest): [CreateProductResponse?, Error?]
+}
+
+class ProductsService implements IProductsService {
   constructor(private productsDS: IProductsDatasource) {
   }
 
@@ -34,6 +38,7 @@ class ProductsService {
     }
 
     const product = new Product(0, req.name, req.price);
+    // TODO: what if there is an error
     const result = this.productsDS.add(product);
     const response = { id: result.id, };
 
