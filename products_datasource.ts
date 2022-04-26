@@ -6,13 +6,13 @@ class ProductsDatasource implements IProductsDatasource {
   constructor() {
   }
 
-  add(product: Product): [Product?, Error?] {
+  add(product: Product): [Error?, Product?] {
     this.productCounter++;
-    return [{
+    return [,{
       id: this.productCounter,
       name: product.name,
       price: product.price,
-    }, undefined];
+    }];
   }
 }
 

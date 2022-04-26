@@ -12,12 +12,12 @@ describe("Products", () => {
   });
 
   test("create", () => {
-    const [responseOne] = productsService.create({
+    const [,responseOne] = productsService.create({
       name: "iPhone",
       price: 1000,
     });
     expect(responseOne!.id).toBe(1);
-    const [responseTwo] = productsService.create({
+    const [,responseTwo] = productsService.create({
       name: "a product",
       price: 200,
     });
@@ -25,7 +25,7 @@ describe("Products", () => {
   });
 
   test("given an invalid name, should return error", () => {
-    const [_, error] = productsService.create({
+    const [error,] = productsService.create({
       name: "",
       price: 1000,
     });
@@ -33,7 +33,7 @@ describe("Products", () => {
   });
 
   test("given an invalid price, should return error", () => {
-    const [_, error] = productsService.create({
+    const [error,] = productsService.create({
       name: "A good name",
       price: 0,
     });
@@ -42,12 +42,12 @@ describe("Products", () => {
 
   test("given an error in datasource while saving product, should return error", () => {
     ds = {
-      add(_product: Product): [Product?, Error?] {
-        return [undefined, new Error("error")];
+      add(_product: Product): [Error?, Product?] {
+        return [new Error("error"),];
       }
     }
     productsService = new ProductsService(ds);
-    const [_, error] = productsService.create({
+    const [error,] = productsService.create({
       name: "A good name",
       price: 99,
     });

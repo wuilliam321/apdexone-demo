@@ -22,7 +22,7 @@ describe('ProductsHttp', () => {
       body: {
         name: 'test',
         price: 10,
-      },
+      }
     });
     const { res } = getMockRes();
     handler(req, res);
@@ -64,8 +64,8 @@ describe('ProductsHttp', () => {
 
   test('given an internal error, should return 500 error', () => {
     const service: IProductsService = {
-      create(_req: CreateProductRequest): [CreateProductResponse?, Error?] {
-        return [, new Error('test')];
+      create(_req: CreateProductRequest): [Error?, CreateProductResponse?] {
+        return [new Error('test'),];
       }
     }
     productsHttp = new ProductsHttp(service);

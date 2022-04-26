@@ -26,7 +26,7 @@ class ProductsHttp {
         price: req.body.price,
       }
 
-      const [result, error] = this.productsService.create(body);
+      const [error, result] = this.productsService.create(body);
       if (error) {
         res.status(500).send(error);
         return;
