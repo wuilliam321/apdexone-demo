@@ -1,18 +1,33 @@
 import { Product } from './models';
 
 export class CreateProductResponse {
-  id: number;
-  constructor(id: number) {
-    this.id = id;
+  constructor(private _code: string) {}
+
+  get code(): string {
+    return this._code;
+  }
+
+  toJSON(): Object {
+    return {
+      code: this._code,
+    };
   }
 }
 
 export class CreateProductRequest {
-  name: string;
-  price: number;
-  constructor(name: string, price: number) {
-    this.name = name;
-    this.price = price;
+  constructor(private _code: string, private _name: string, private _price: number) {
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get code(): string {
+    return this._code;
+  }
+
+  get price(): number {
+    return this._price;
   }
 }
 
@@ -25,10 +40,13 @@ export interface IProductsService {
 }
 
 class ProductsService implements IProductsService {
-  constructor(private productsDS: IProductsDatasource) {
-  }
+  constructor(private productsDS: IProductsDatasource) {}
 
   create(req: CreateProductRequest): [Error?, CreateProductResponse?] {
+    if (req.code.length === 0) {
+      return [new Error("code is required"),];
+    }
+
     if (req.name.length === 0) {
       return [new Error("name is required"),];
     }
@@ -37,13 +55,13 @@ class ProductsService implements IProductsService {
       return [new Error("price must be greater than 0"), ];
     }
 
-    const product = new Product(0, req.name, req.price);
+    const product = new Product(req.code, req.name, req.price);
     const [error, result] = this.productsDS.add(product);
     if (error) {
       return [error,];
     }
 
-    const response = { id: result!.id, };
+    const response = new CreateProductResponse(result!.code);
 
     return [, response];
   }

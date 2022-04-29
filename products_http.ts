@@ -11,6 +11,11 @@ class ProductsHttp {
         return;
       }
 
+      if (!req.body.code) {
+        res.status(400).send('code is required');
+        return;
+      }
+
       if (!req.body.name) {
         res.status(400).send('name is required');
         return;
@@ -21,10 +26,7 @@ class ProductsHttp {
         return;
       }
 
-      const body: CreateProductRequest = {
-        name: req.body.name,
-        price: req.body.price,
-      }
+      const body = new CreateProductRequest(req.body.code, req.body.name, req.body.price);
 
       const [error, result] = this.productsService.create(body);
       if (error) {

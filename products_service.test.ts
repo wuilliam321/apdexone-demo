@@ -1,4 +1,4 @@
-import ProductsService, { IProductsDatasource, IProductsService } from './products_service';
+import ProductsService, { CreateProductRequest, IProductsDatasource, IProductsService } from './products_service';
 import ProductsDatasource from './products_datasource';
 import { Product } from './models';
 
@@ -12,45 +12,38 @@ describe("Products", () => {
   });
 
   test("create", () => {
-    const [,responseOne] = productsService.create({
-      name: "iPhone",
-      price: 1000,
-    });
-    expect(responseOne!.id).toBe(1);
-    const [,responseTwo] = productsService.create({
-      name: "a product",
-      price: 200,
-    });
-    expect(responseTwo!.id).toBe(2);
+    const requestOne = new CreateProductRequest( "a_code", "iPhone", 1000)
+    const [,responseOne] = productsService.create(requestOne);
+    expect(responseOne!.code).toBe("a_code");
+  });
+
+  test("given an invalid code, should return error", () => {
+    const request = new CreateProductRequest( "", "iPhone", 1000)
+    const [error,] = productsService.create(request);
+    expect(error).toBeInstanceOf(Error);
   });
 
   test("given an invalid name, should return error", () => {
-    const [error,] = productsService.create({
-      name: "",
-      price: 1000,
-    });
+    const request = new CreateProductRequest( "123", "", 1000)
+    const [error,] = productsService.create(request);
     expect(error).toBeInstanceOf(Error);
   });
 
   test("given an invalid price, should return error", () => {
-    const [error,] = productsService.create({
-      name: "A good name",
-      price: 0,
-    });
+    const request = new CreateProductRequest( "123", "iPhone", 0)
+    const [error,] = productsService.create(request);
     expect(error).toBeInstanceOf(Error);
   });
 
   test("given an error in datasource while saving product, should return error", () => {
     ds = {
       add(_product: Product): [Error?, Product?] {
-        return [new Error("error"),];
+         return [new Error("error"),];
       }
     }
     productsService = new ProductsService(ds);
-    const [error,] = productsService.create({
-      name: "A good name",
-      price: 99,
-    });
+    const request = new CreateProductRequest( "123", "iPhone", 99)
+    const [error,] = productsService.create(request);
     expect(error).toBeInstanceOf(Error);
   });
 });

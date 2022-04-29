@@ -20,6 +20,7 @@ describe('ProductsHttp', () => {
   test('given a product, should create it', () => {
     const req = getMockReq({
       body: {
+        code: '123',
         name: 'test',
         price: 10,
       }
@@ -38,9 +39,23 @@ describe('ProductsHttp', () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
+  test('given an invalid code, should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '',
+        name: 'name',
+        price: 10,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
   test('given an invalid name, should return 400 error', () => {
     const req = getMockReq({
       body: {
+        code: '123',
         name: '',
         price: 10,
       },
@@ -53,6 +68,7 @@ describe('ProductsHttp', () => {
   test('given an invalid price, should return 400 error', () => {
     const req = getMockReq({
       body: {
+        code: '123',
         name: 'valid',
         price: 0,
       },
@@ -72,6 +88,7 @@ describe('ProductsHttp', () => {
     handler = productsHttp.handleCreateProduct();
     const req = getMockReq({
       body: {
+        code: '123',
         name: 'valid',
         price: 100,
       },
