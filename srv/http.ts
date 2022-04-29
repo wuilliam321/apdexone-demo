@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { CreateProductRequest, IProductsService, ListProductRequest } from './products_service';
+import { IProductsService } from '../lib/interfaces';
+import { CreateProductRequest, ListProductRequest } from './models';
 
-class ProductsHttp {
+class HttpServer {
   constructor(private productsService: IProductsService) { }
 
   handleCreateProduct(): (req: Request, res: Response) => void {
@@ -51,4 +52,4 @@ class ProductsHttp {
   };
 }
 
-export default ProductsHttp;
+export default HttpServer;

@@ -1,11 +1,11 @@
-import loki, { Collection } from 'lokijs';
-import { Product } from './models';
-import { IProductsDatasource } from './products_service';
+import Loki, { Collection } from 'lokijs';
+import { Product } from '../lib/models';
+import { IProductsDatasource } from '../lib/interfaces';
 
 class ProductsLokiDatasource implements IProductsDatasource {
   private products: Collection<Product>;
 
-  constructor(private db: loki) {
+  constructor(private db: Loki) {
     this.products = this.db.addCollection('products', { indices: ['code'] });
   }
 

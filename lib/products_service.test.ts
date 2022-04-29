@@ -1,15 +1,17 @@
-import ProductsService, { CreateProductRequest, IProductsDatasource, IProductsService, ListProductRequest } from './products_service';
-import ProductsDatasource from './products_datasource';
-import { Product } from './models';
+import ProductsService from './products_service';
+import { Product } from '../lib/models';
+import { DatasourceMock } from '../helpers/tests';
+import { IProductsDatasource, IProductsService } from '../lib/interfaces';
+import { CreateProductRequest, ListProductRequest } from '../srv/models';
 
 describe("Products Create", () => {
-  let ds: IProductsDatasource;
+  let dsMock: IProductsDatasource;
   let productsService: IProductsService;
   let request: CreateProductRequest;
 
   beforeEach(() => {
-    ds = new ProductsDatasource();
-    productsService = new ProductsService(ds);
+    dsMock = new DatasourceMock();
+    productsService = new ProductsService(dsMock);
     request = new CreateProductRequest("a_code", "iPhone", 1000)
   });
 
@@ -37,8 +39,8 @@ describe("Products Create", () => {
   });
 
   test("given an error in datasource while saving product, should return error", () => {
-    ds.add = (_product: Product): [Error?, Product?] => [new Error("error"),];
-    productsService = new ProductsService(ds);
+    dsMock.add = (_product: Product): [Error?, Product?] => [new Error("error"),];
+    productsService = new ProductsService(dsMock);
     const [error,] = productsService.create(request);
     expect(error).toBeInstanceOf(Error);
   });
@@ -50,7 +52,7 @@ describe("Products List", () => {
   let request: ListProductRequest;
 
   beforeEach(() => {
-    ds = new ProductsDatasource();
+    ds = new DatasourceMock();
     productsService = new ProductsService(ds);
     request = new ListProductRequest();
   });

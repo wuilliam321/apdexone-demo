@@ -1,49 +1,24 @@
-import loki from 'lokijs';
-import express, { Express, Request, Response } from 'express';
+import Loki from 'lokijs';
+import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import ProductsHttp from './products_http';
-import ProductsService from './products_service';
-import ProductsLokiDatasource from './products_loki_datasource';
-// import ProductsDatasource from './products_datasource';
+import HttpServer from './srv/http';
+import ProductsService from './lib/products_service';
+import LokiDatasource from './infra/loki_datasource';
+import routes from './routes';
 
 dotenv.config();
 
-const db = new loki('inventoryDB');
-const ds = new ProductsLokiDatasource(db);
-
-// const ds = new ProductsDatasource();
+const db = new Loki('inventoryDB');
+const ds = new LokiDatasource(db);
 const service = new ProductsService(ds);
-const productsHttp = new ProductsHttp(service);
+const server = new HttpServer(service);
 
 const app: Express = express();
 app.use(express.json())
+
+routes(app, server);
+
 const port = process.env.PORT || 3000;
-
-// [] health check
-// Products
-// [X] GET /products
-// [X] POST /products
-// [] PUT /products/:id
-// [] PATCH /products/:id
-// [] DELETE /products/:id
-//
-// Inventory
-// [] GET /inventory/:productId
-// [] PATCH /products/:id
-//
-// Orders
-// [] GET /orders
-// [] POST /orders
-// [] PUT /orders/:id
-// [] PATCH /orders/:id
-// [] DELETE /orders/:id
-app.get('/', (_req: Request, res: Response) => {
-  res.send('Hello World!');
-});
-
-app.get('/products', productsHttp.handleListProducts());
-app.post('/products', productsHttp.handleCreateProduct());
-
 app.listen(port, () => {
   console.log(`[server]: running at http://localhost:${port}`);
 });

@@ -1,20 +1,20 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { Product } from './models';
-import ProductsDatasource from './products_datasource';
-import ProductsHttp from './products_http';
-import ProductsService, { CreateProductRequest, CreateProductResponse, IProductsDatasource, IProductsService, ListProductRequest, ListProductResponse } from './products_service';
+import HttpServer from './http';
+import { CreateProductRequest, CreateProductResponse, ListProductRequest, ListProductResponse } from './models';
+import { DatasourceMock } from '../helpers/tests';
+import { Product } from '../lib/models';
+import ProductsService from '../lib/products_service';
+import { IProductsService } from '../lib/interfaces';
 
 describe('ProductsHttp Create', () => {
-  let productsHttp: ProductsHttp;
-  let ds: IProductsDatasource;
+  let server: HttpServer;
   let service: IProductsService;
   let handler: (req: any, res: any) => void;
 
   beforeEach(() => {
-    ds = new ProductsDatasource();
-    service = new ProductsService(ds);
-    productsHttp = new ProductsHttp(service);
-    handler = productsHttp.handleCreateProduct();
+    service = new ProductsService(new DatasourceMock());
+    server = new HttpServer(service);
+    handler = server.handleCreateProduct();
   });
 
   test('given a product, should create it', () => {
@@ -96,16 +96,14 @@ describe('ProductsHttp Create', () => {
 });
 
 describe('ProductsHttp List', () => {
-  let productsHttp: ProductsHttp;
-  let ds: IProductsDatasource;
+  let server: HttpServer;
   let service: IProductsService;
   let handler: (req: any, res: any) => void;
 
   beforeEach(() => {
-    ds = new ProductsDatasource();
-    service = new ProductsService(ds);
-    productsHttp = new ProductsHttp(service);
-    handler = productsHttp.handleListProducts();
+    service = new ProductsService(new DatasourceMock());
+    server = new HttpServer(service);
+    handler = server.handleListProducts();
   });
 
   test('given that there are no products, should return an empty list of products', () => {
@@ -129,8 +127,8 @@ describe('ProductsHttp List', () => {
     service.list = (_req: ListProductRequest): [Error?, ListProductResponse?] => {
       return [, new ListProductResponse(products)];
     };
-    productsHttp = new ProductsHttp(service);
-    handler = productsHttp.handleListProducts();
+    server = new HttpServer(service);
+    handler = server.handleListProducts();
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
@@ -142,7 +140,7 @@ describe('ProductsHttp List', () => {
     service.list = (_req: ListProductRequest): [Error?, ListProductResponse?] => {
       return [new Error('test'),];
     };
-    handler = productsHttp.handleListProducts();
+    handler = server.handleListProducts();
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
