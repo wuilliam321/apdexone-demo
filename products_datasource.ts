@@ -8,6 +8,10 @@ class ProductsDatasource implements IProductsDatasource {
   add(product: Product): [Error?, Product?] {
     return [,product];
   }
+
+  list(): [Error?, Product[]?] {
+    return [, [] as Product[]];
+  }
 }
 
 export default ProductsDatasource;

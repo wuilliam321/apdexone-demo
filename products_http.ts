@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateProductRequest, IProductsService } from './products_service';
+import { CreateProductRequest, IProductsService, ListProductRequest } from './products_service';
 
 class ProductsHttp {
   constructor(private productsService: IProductsService) { }
@@ -37,6 +37,18 @@ class ProductsHttp {
       res.status(201).send(result);
     }
   }
+
+  handleListProducts(): (req: Request, res: Response) => void {
+    return (_req: Request, res: Response) => {
+      const body = new ListProductRequest();
+      const [error, result]  = this.productsService.list(body);
+      if (error) {
+        res.status(500).send(error);
+        return;
+      }
+      res.status(201).send(result!.products);
+    }
+  };
 }
 
 export default ProductsHttp;

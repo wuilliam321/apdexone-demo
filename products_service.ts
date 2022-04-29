@@ -31,12 +31,28 @@ export class CreateProductRequest {
   }
 }
 
+export class ListProductRequest {}
+export class ListProductResponse {
+  constructor(private _products: Product[]) {}
+  get products(): Product[] {
+    return this._products;
+  }
+
+  toJSON(): Object {
+    return {
+      products: this._products,
+    };
+  }
+}
+
 export interface IProductsDatasource {
   add(product: Product): [Error?, Product?]
+  list(): [Error?, Product[]?]
 }
 
 export interface IProductsService {
   create(req: CreateProductRequest): [Error?, CreateProductResponse?]
+  list(req: ListProductRequest): [Error?, ListProductResponse?]
 }
 
 class ProductsService implements IProductsService {
@@ -64,6 +80,11 @@ class ProductsService implements IProductsService {
     const response = new CreateProductResponse(result!.code);
 
     return [, response];
+  }
+
+  list(_req: ListProductRequest): [Error?, ListProductResponse?] {
+    const [, products]= this.productsDS.list();
+    return [, new ListProductResponse(products!)];
   }
 }
 

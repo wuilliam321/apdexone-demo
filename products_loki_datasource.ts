@@ -2,7 +2,6 @@ import loki, { Collection } from 'lokijs';
 import { Product } from './models';
 import { IProductsDatasource } from './products_service';
 
-
 class ProductsLokiDatasource implements IProductsDatasource {
   private products: Collection<Product>;
 
@@ -16,6 +15,10 @@ class ProductsLokiDatasource implements IProductsDatasource {
       return [new Error('Failed to add product'),];
     }
     return [, res];
+  }
+
+  list(): [Error?, Product[]?] {
+    throw new Error('Method not implemented.');
   }
 }
 

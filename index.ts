@@ -21,8 +21,8 @@ const port = process.env.PORT || 3000;
 
 // [] health check
 // Products
-// [] GET /products
-// [] POST /products
+// [X] GET /products
+// [X] POST /products
 // [] PUT /products/:id
 // [] PATCH /products/:id
 // [] DELETE /products/:id
@@ -37,10 +37,11 @@ const port = process.env.PORT || 3000;
 // [] PUT /orders/:id
 // [] PATCH /orders/:id
 // [] DELETE /orders/:id
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
+app.get('/products', productsHttp.handleListProducts());
 app.post('/products', productsHttp.handleCreateProduct());
 
 app.listen(port, () => {
