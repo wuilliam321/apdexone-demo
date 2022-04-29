@@ -3,14 +3,14 @@ import { Product } from './models';
 export class CreateProductResponse {
   constructor(private _code: string) {}
 
-  get code(): string {
-    return this._code;
-  }
-
   toJSON(): Object {
     return {
       code: this._code,
     };
+  }
+
+  get code(): string {
+    return this._code;
   }
 }
 
@@ -22,26 +22,39 @@ export class CreateProductRequest {
     return this._name;
   }
 
+  set name(name: string) {
+    this._name = name;
+  }
+
   get code(): string {
     return this._code;
   }
 
+  set code(code: string) {
+    this._code = code;
+  }
+
   get price(): number {
     return this._price;
+  }
+
+  set price(price: number) {
+    this._price = price;
   }
 }
 
 export class ListProductRequest {}
 export class ListProductResponse {
   constructor(private _products: Product[]) {}
-  get products(): Product[] {
-    return this._products;
-  }
 
   toJSON(): Object {
     return {
       products: this._products,
     };
+  }
+
+  get products(): Product[] {
+    return this._products;
   }
 }
 
@@ -83,7 +96,10 @@ class ProductsService implements IProductsService {
   }
 
   list(_req: ListProductRequest): [Error?, ListProductResponse?] {
-    const [, products]= this.productsDS.list();
+    const [error, products]= this.productsDS.list();
+    if (error) {
+      return [error,];
+    }
     return [, new ListProductResponse(products!)];
   }
 }

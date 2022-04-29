@@ -18,7 +18,8 @@ class ProductsLokiDatasource implements IProductsDatasource {
   }
 
   list(): [Error?, Product[]?] {
-    throw new Error('Method not implemented.');
+    const res = this.products.find();
+    return [, res];
   }
 }
 
