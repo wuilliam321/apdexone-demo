@@ -1,20 +1,23 @@
 import { Product } from "./models";
 
+// TODO: vue related
+export interface ServiceInjection {
+  productService: IProductService;
+}
+
 export class CreateProductRequest {
-  constructor(public code: string, public name: string, public price: number) { }
+  constructor(public code: string, public name: string, public price: number) {}
 }
 
 export class CreateProductResponse {
-  constructor(public code: string) { }
+  constructor(public code: string) {}
 }
 
 export class ListProductResponse {
-  constructor(public products: Product[]) { }
+  constructor(public products: Product[]) {}
 }
 
-export class ListProductParams {
-  constructor() { }
-}
+export class ListProductParams {}
 
 export interface IProductService {
   list(params: ListProductParams): Promise<[Error?, ListProductResponse?]>;

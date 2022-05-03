@@ -11,6 +11,6 @@ export class Validate {
     if (product.price <= 0) {
       return [new Error("price is required and greater than 0"), false];
     }
-    return [, true];
+    return [undefined, true];
   }
 }
