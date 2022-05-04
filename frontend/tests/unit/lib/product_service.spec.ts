@@ -1,7 +1,6 @@
 import {
   HttpClient,
   IProductService,
-  ListProductParams,
   ListProductResponse,
 } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
@@ -78,8 +77,7 @@ describe("Products: list", () => {
   });
 
   it("given a list request, should return all products", async () => {
-    const params: ListProductParams = {};
-    const [, res] = await productService.list(params);
+    const [, res] = await productService.list();
     const products = new ListProductResponse([
       new Product("123", "test", 1000),
     ]);
@@ -91,8 +89,7 @@ describe("Products: list", () => {
     httpMock.get.mockImplementationOnce(
       (): Promise<any> => Promise.resolve([new Error("error")])
     );
-    const params: ListProductParams = {};
-    const [error] = await productService.list(params);
+    const [error] = await productService.list();
     expect(error).toBeInstanceOf(Error);
   });
 });

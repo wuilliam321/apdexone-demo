@@ -35,7 +35,7 @@ export class ProductService implements IProductService {
   }
 
   async list(
-    _params: ListProductParams
+    _params?: ListProductParams
   ): Promise<[Error?, ListProductResponse?]> {
     const [err, res] = await this.http.get<AxiosResponse<Product[], any>>(
       "/products",

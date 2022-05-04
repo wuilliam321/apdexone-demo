@@ -20,7 +20,7 @@ export class ListProductResponse {
 export class ListProductParams {}
 
 export interface IProductService {
-  list(params: ListProductParams): Promise<[Error?, ListProductResponse?]>;
+  list(params?: ListProductParams): Promise<[Error?, ListProductResponse?]>;
   create(product: Product): Promise<[Error?, string?]>;
 }
 

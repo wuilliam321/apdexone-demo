@@ -18,13 +18,9 @@ describe("TheCatalog.vue", () => {
 
   beforeEach(() => {
     const productServiceMock: IProductService = {
-      list: jest.fn(
-        (
-          _params: ListProductParams
-        ): Promise<[Error?, ListProductResponse?]> => {
-          return Promise.resolve([, { products: products }]);
-        }
-      ),
+      list: jest.fn((): Promise<[Error?, ListProductResponse?]> => {
+        return Promise.resolve([, { products: products }]);
+      }),
       create: jest.fn((_product: Product): Promise<[Error?, string?]> => {
         return Promise.resolve([,]);
       }),
@@ -54,7 +50,7 @@ describe("TheCatalog.vue", () => {
 
   it("should show an error when fetch products fails", (done) => {
     productService.list = jest.fn(
-      (_params: ListProductParams): Promise<[Error?, ListProductResponse?]> => {
+      (): Promise<[Error?, ListProductResponse?]> => {
         return Promise.resolve([new Error("an error")]);
       }
     );
