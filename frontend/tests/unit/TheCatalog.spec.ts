@@ -14,7 +14,7 @@ const products = [new Product("1234", "name", 1000)];
 
 describe("TheCatalog.vue", () => {
   let productService: IProductService;
-  let wrapper: Wrapper<TheCatalog, Element>;
+  let wrapper: Wrapper<Vue, Element>;
 
   beforeEach(() => {
     const productServiceMock: IProductService = {

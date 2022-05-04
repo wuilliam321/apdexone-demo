@@ -10,8 +10,12 @@ import { ProductService } from "@/lib/product_service";
 const httpMock = {
   post: jest.fn((): Promise<any> => Promise.resolve([, { code: "123" }])),
   get: jest.fn((): Promise<any> => {
-    const res = new ListProductResponse([new Product("123", "test", 1000)]);
-    return Promise.resolve([, res]);
+    const products = [new Product("123", "test", 1000)];
+    const response = {
+      status: 201,
+      data: products,
+    };
+    return Promise.resolve([, response]);
   }),
 };
 

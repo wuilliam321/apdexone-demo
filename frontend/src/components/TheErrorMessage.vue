@@ -1,5 +1,5 @@
 <template>
-  <div>{{error}}</div>
+  <div>{{ error }}</div>
 </template>
 
 <script lang="ts">

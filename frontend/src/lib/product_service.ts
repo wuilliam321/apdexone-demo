@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import {
   CreateProductRequest,
   CreateProductResponse,
@@ -36,14 +37,17 @@ export class ProductService implements IProductService {
   async list(
     _params: ListProductParams
   ): Promise<[Error?, ListProductResponse?]> {
-    const [err, res] = await this.http.get<ListProductResponse>(
+    const [err, res] = await this.http.get<AxiosResponse<Product[], any>>(
       "/products",
       undefined
     );
     if (err) {
       return [err];
     }
+    if (res && res.status === 201) {
+      return [undefined, new ListProductResponse(res!.data)];
+    }
 
-    return [undefined, res];
+    return [undefined, new ListProductResponse([] as Product[])];
   }
 }
