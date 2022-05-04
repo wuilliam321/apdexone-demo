@@ -11,7 +11,7 @@ const httpMock = {
   post: (): Promise<any> => Promise.resolve([undefined, { code: "123" }]),
   get: (): Promise<any> => {
     const res = new ListProductResponse([new Product("123", "test", 1000)]);
-    return Promise.resolve([undefined, res]);
+    return Promise.resolve([new Error("an error"), res]);
   },
 };
 

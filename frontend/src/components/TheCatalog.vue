@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TheErrorMessage v-if="error" :error="error" />
     <ProductList :products="products" />
   </div>
 </template>
@@ -7,32 +8,32 @@
 <script lang="ts">
 import Vue, { VueConstructor } from "vue";
 import ProductList from "@/components/ProductList.vue";
+import TheErrorMessage from "@/components/TheErrorMessage.vue";
 import { ListProductParams, ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
-  /* export default Vue.extend({ */
   name: "TheCatalog",
   components: {
     ProductList,
+    TheErrorMessage,
   },
   inject: ["productService"],
   data() {
     return {
       products: [] as Product[],
+      error: undefined as Error | undefined,
     };
   },
-  /* async created() { */
-  /*   const params = new ListProductParams(); */
-  /*   const [_, response] = await this.productService.list(params); */
-  /*   if (response?.products) { */
-  /*     this.products = response.products; */
-  /*   } */
-  /* }, */
-  mounted() {
-    // TODO: continue create this code with tests
+  async mounted() {
     const params = new ListProductParams();
-    this.productService.list(params);
+    const [error, response] = await this.productService.list(params);
+    if (error) {
+      this.error = error;
+    }
+    if (response?.products) {
+      this.products = response.products;
+    }
   },
 });
 </script>
