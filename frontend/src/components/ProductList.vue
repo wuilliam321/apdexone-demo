@@ -1,6 +1,5 @@
 <template>
   <div>
-    <ProductAddButton />
     <div class="products">
       <template v-for="product in products">
         <ProductListItem
@@ -15,14 +14,12 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import ProductListItem from "@/components/ProductListItem.vue";
-import ProductAddButton from "@/components/ProductAddButton.vue";
 import { Product } from "@/lib/models";
 
 export default Vue.extend({
   name: "ProductList",
   components: {
     ProductListItem,
-    ProductAddButton,
   },
   props: {
     products: {

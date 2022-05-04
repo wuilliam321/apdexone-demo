@@ -1,32 +1,25 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, shallowMount, Wrapper } from "@vue/test-utils";
 import TheCatalog from "@/components/TheCatalog.vue";
 import ProductList from "@/components/ProductList.vue";
+import ProductAddButton from "@/components/ProductAddButton.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
 import {
   IProductService,
-  ListProductParams,
   ListProductResponse,
   ServiceInjection,
 } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
-
-const products = [new Product("1234", "name", 1000)];
+import { newProductServiceMock } from "./helpers";
 
 describe("TheCatalog.vue", () => {
+  let products: Product[];
   let productService: IProductService;
   let wrapper: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    const productServiceMock: IProductService = {
-      list: jest.fn((): Promise<[Error?, ListProductResponse?]> => {
-        return Promise.resolve([, { products: products }]);
-      }),
-      create: jest.fn((_product: Product): Promise<[Error?, string?]> => {
-        return Promise.resolve([,]);
-      }),
-    };
-    productService = productServiceMock;
-    wrapper = shallowMount(TheCatalog, {
+    products = [new Product("1234", "name", 1000)];
+    productService = newProductServiceMock(products);
+    wrapper = mount(TheCatalog, {
       provide(): ServiceInjection {
         return { productService };
       },
@@ -34,7 +27,8 @@ describe("TheCatalog.vue", () => {
   });
 
   it("should render the catalog", () => {
-    expect(wrapper.findAllComponents(ProductList).length).toBe(1);
+    expect(wrapper.findComponent(ProductList).exists()).toBe(true);
+    expect(wrapper.findComponent(ProductAddButton).exists()).toBe(true);
     expect(wrapper.findComponent(TheErrorMessage).exists()).toBe(false);
   });
 

@@ -6,7 +6,7 @@ import {
 import { Product } from "@/lib/models";
 import { ProductService } from "@/lib/product_service";
 
-const httpMock = {
+const newHttpMock = () => ({
   post: jest.fn((): Promise<any> => Promise.resolve([, { code: "123" }])),
   get: jest.fn((): Promise<any> => {
     const products = [new Product("123", "test", 1000)];
@@ -16,14 +16,14 @@ const httpMock = {
     };
     return Promise.resolve([, response]);
   }),
-};
+});
 
 describe("Products: create", () => {
   let httpClient: HttpClient;
   let productService: IProductService;
 
   beforeEach(() => {
-    httpClient = httpMock;
+    httpClient = newHttpMock();
     productService = new ProductService(httpClient);
   });
 
@@ -36,7 +36,7 @@ describe("Products: create", () => {
       price: product.price,
     };
     expect(res).toBe(product.code);
-    expect(httpMock.post).toBeCalledWith("/products", undefined, body);
+    expect(httpClient.post).toBeCalledWith("/products", undefined, body);
   });
 
   it("given an invalid product, should return error", async () => {
@@ -58,9 +58,7 @@ describe("Products: create", () => {
   });
 
   it("given an error while creating, should return error", async () => {
-    httpMock.post.mockImplementationOnce(
-      (): Promise<any> => Promise.resolve([new Error("error")])
-    );
+    httpClient.post = (): Promise<any> => Promise.resolve([new Error("error")]);
     const product = new Product("123", "name", 1000);
     const [error] = await productService.create(product);
     expect(error).toBeInstanceOf(Error);
@@ -72,7 +70,7 @@ describe("Products: list", () => {
   let productService: IProductService;
 
   beforeEach(() => {
-    httpClient = httpMock;
+    httpClient = newHttpMock();
     productService = new ProductService(httpClient);
   });
 
@@ -82,13 +80,11 @@ describe("Products: list", () => {
       new Product("123", "test", 1000),
     ]);
     expect(res).toEqual(products);
-    expect(httpMock.get).toBeCalledWith("/products", undefined);
+    expect(httpClient.get).toBeCalledWith("/products", undefined);
   });
 
   it("given an error while getting all products, should return error", async () => {
-    httpMock.get.mockImplementationOnce(
-      (): Promise<any> => Promise.resolve([new Error("error")])
-    );
+    httpClient.get = (): Promise<any> => Promise.resolve([new Error("error")]);
     const [error] = await productService.list();
     expect(error).toBeInstanceOf(Error);
   });

@@ -1,33 +1,21 @@
 <template>
   <div>
-    <button role="button">Add product</button>
+    <button type="button" role="button" @click="goToProductAdd">
+      Add product
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-/* import { ServiceInjection } from "@/lib/interfaces"; */
-import { Product } from "@/lib/models";
 import Vue from "vue";
 
 export default Vue.extend({
-  /* export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({ */
   name: "ProductAddButton",
-  inject: ["productService"],
-  data() {
-    return {
-      product: {} as Product,
-    };
+  methods: {
+    goToProductAdd() {
+      this.$router.push("/products/add");
+    },
   },
-  /* methods: { */
-  /*   async addProduct() { */
-  /*     const [error, response] = await this.productService.create({ */
-  /*       code: "test", */
-  /*       name: "test", */
-  /*       price: 1, */
-  /*     }); */
-  /*     console.log(error, response); */
-  /*   }, */
-  /* }, */
 });
 </script>
 

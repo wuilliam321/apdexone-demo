@@ -11,6 +11,11 @@ const routes: Array<RouteConfig> = [
     component: HomeView,
   },
   {
+    path: "/products",
+    name: "products",
+    component: HomeView,
+  },
+  {
     path: "/about",
     name: "about",
     // route level code-splitting
@@ -18,6 +23,14 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/products/add",
+    name: "products-add",
+    component: () =>
+      import(
+        /* webpackChunkName: "product-add-form" */ "../components/ProductAddForm.vue"
+      ),
   },
 ];
 
