@@ -1,14 +1,25 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+  <div id="app" class="container">
+    <div class="row">
+      <div class="col">
+        <nav>
+          <router-link to="/">Home</router-link> |
+          <router-link to="/about">About</router-link>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <router-view />
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
+html {
+  background-color: #ecf0f1;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

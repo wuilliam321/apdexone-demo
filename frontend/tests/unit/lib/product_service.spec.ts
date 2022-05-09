@@ -1,5 +1,5 @@
+import { HttpClient } from "@/lib/http";
 import {
-  HttpClient,
   IProductService,
   ListProductResponse,
 } from "@/lib/interfaces";
@@ -7,7 +7,13 @@ import { Product } from "@/lib/models";
 import { ProductService } from "@/lib/product_service";
 
 const newHttpMock = () => ({
-  post: jest.fn((): Promise<any> => Promise.resolve([, { code: "123" }])),
+  post: jest.fn((): Promise<any> => {
+    const response = {
+      status: 201,
+      data: { code: "123" },
+    };
+    return Promise.resolve([, response]);
+  }),
   get: jest.fn((): Promise<any> => {
     const products = [new Product("123", "test", 1000)];
     const response = {

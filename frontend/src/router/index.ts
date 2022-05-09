@@ -29,7 +29,7 @@ const routes: Array<RouteConfig> = [
     name: "products-add",
     component: () =>
       import(
-        /* webpackChunkName: "product-add-form" */ "../components/ProductAddForm.vue"
+        /* webpackChunkName: "product-add-view" */ "../views/ProductAddView.vue"
       ),
   },
 ];

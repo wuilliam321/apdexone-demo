@@ -1,6 +1,15 @@
 <template>
-  <div class="product-item">
-    <h2>{{ product.code }} - {{ product.name }} - {{ product.price }}</h2>
+  <div class="row product-item">
+    <div class="col product-item__code">
+      {{ product.code }}
+    </div>
+    <div class="col product-item__name">
+      {{ product.name }}
+    </div>
+    <div class="col product-item__price">
+      {{ product.price }}
+    </div>
+    <div class="col product-item__actions">Edit | Delete</div>
   </div>
 </template>
 
@@ -19,4 +28,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.product-item {
+  border-bottom: 1px solid #ccc;
+}
+</style>

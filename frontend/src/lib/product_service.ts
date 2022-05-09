@@ -1,8 +1,5 @@
-import { AxiosResponse } from "axios";
+import { HttpClient, HttpResponse } from "./http";
 import {
-  CreateProductRequest,
-  CreateProductResponse,
-  HttpClient,
   IProductService,
   ListProductParams,
   ListProductResponse,
@@ -19,25 +16,29 @@ export class ProductService implements IProductService {
       return [error];
     }
 
-    const [err, res] = await this.http.post<
-      CreateProductRequest,
-      CreateProductResponse
-    >("/products", undefined, {
-      code: product.code,
-      name: product.name,
-      price: product.price,
-    });
+    const [err, res] = await this.http.post<Product, HttpResponse<Product>>(
+      "/products",
+      undefined,
+      {
+        code: product.code,
+        name: product.name,
+        price: product.price,
+      }
+    );
     if (err) {
       return [err];
     }
+    if (res && res.status === 201) {
+      return [undefined, res!.data.code];
+    }
 
-    return [undefined, res!.code];
+    return [undefined, ""];
   }
 
   async list(
     _params?: ListProductParams
   ): Promise<[Error?, ListProductResponse?]> {
-    const [err, res] = await this.http.get<AxiosResponse<Product[], any>>(
+    const [err, res] = await this.http.get<Product[], HttpResponse<Product[]>>(
       "/products",
       undefined
     );

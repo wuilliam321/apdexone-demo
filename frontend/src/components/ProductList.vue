@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="products">
-      <template v-for="product in products">
-        <ProductListItem
-          :key="product.code"
-          :product="product"
-        ></ProductListItem>
-      </template>
+    <div class="row product-list">
+      <div class="col product-list__header">code</div>
+      <div class="col product-list__header">name</div>
+      <div class="col product-list__header">price</div>
+      <div class="col product-list__header">actions</div>
     </div>
+    <template v-for="product in products">
+      <ProductListItem :key="product.code" :product="product"></ProductListItem>
+    </template>
   </div>
 </template>
 
@@ -30,4 +31,12 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.product-list {
+  border: 1px solid #ccc;
+}
+.product-list__header {
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+}
+</style>

@@ -1,4 +1,4 @@
-import { HttpClient } from "@/lib/interfaces";
+import { HttpClient } from "@/lib/http";
 import axios from "axios";
 
 const http = axios.create({
@@ -7,16 +7,19 @@ const http = axios.create({
 });
 
 export class AxiosClient implements HttpClient {
-  async post<T, U>(
+  async post<T = any, U = any, D = any>(
     uri: string,
-    _headers?: Headers,
+    _config?: D,
     body?: T
   ): Promise<[Error?, U?]> {
     const res = await http.post<T, U>(uri, body);
     return [undefined, res];
   }
-  async get<T>(uri: string, _headers?: Headers): Promise<[Error?, T?]> {
-    const res = await http.get<T, any>(uri);
+  async get<T = any, U = any, D = any>(
+    uri: string,
+    _config?: D
+  ): Promise<[Error?, U?]> {
+    const res = await http.get<T, U, D>(uri);
     return [undefined, res];
   }
 }
