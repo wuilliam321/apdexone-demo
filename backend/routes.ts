@@ -25,6 +25,7 @@ app.get('/', (_req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
+app.get('/products/:id', server.handleGetProduct());
 app.get('/products', server.handleListProducts());
 app.post('/products', server.handleCreateProduct());
 }

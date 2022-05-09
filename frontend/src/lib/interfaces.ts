@@ -22,4 +22,6 @@ export class ListProductParams {}
 export interface IProductService {
   list(params?: ListProductParams): Promise<[Error?, ListProductResponse?]>;
   create(product: Product): Promise<[Error?, string?]>;
+  update(product: Product): Promise<[Error?, string?]>;
+  get(productId: string): Promise<[Error?, Product?]>;
 }

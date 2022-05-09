@@ -2,7 +2,7 @@ import ProductsService from './products_service';
 import { Product } from '../lib/models';
 import { DatasourceMock } from '../helpers/tests';
 import { IProductsDatasource, IProductsService } from '../lib/interfaces';
-import { CreateProductRequest, ListProductRequest } from '../srv/models';
+import { CreateProductRequest, GetProductRequest, ListProductRequest } from '../srv/models';
 
 describe("Products Create", () => {
   let dsMock: IProductsDatasource;
@@ -72,6 +72,36 @@ describe("Products List", () => {
   test("given an error in datasource while getting products, should return error", () => {
     ds.list = () => [new Error("error"),];
     const [error,] = productsService.list(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+});
+
+describe("Products Get", () => {
+  let ds: IProductsDatasource;
+  let productsService: IProductsService;
+  let request: GetProductRequest;
+
+  beforeEach(() => {
+    ds = new DatasourceMock();
+    productsService = new ProductsService(ds);
+    request = new GetProductRequest("a_code");
+  });
+
+  test("get product", () => {
+    const [, response] = productsService.get(request);
+    expect(response!.product).toEqual(new Product("a_code", "iPhone", 1000));
+  });
+
+  test("get an invalid code", () => {
+    ds.getByCode = () => [,undefined];
+    request.code = "invalid";
+    const [, response] = productsService.get(request);
+    expect(response!.product).toEqual(undefined);
+  });
+
+  test("given an error in datasource while getting product, should return error", () => {
+    ds.getByCode = () => [new Error("error"),];
+    const [error,] = productsService.get(request);
     expect(error).toBeInstanceOf(Error);
   });
 });

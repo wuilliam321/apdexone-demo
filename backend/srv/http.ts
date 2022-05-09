@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IProductsService } from '../lib/interfaces';
-import { CreateProductRequest, ListProductRequest } from './models';
+import { CreateProductRequest, GetProductRequest, ListProductRequest } from './models';
 
 class HttpServer {
   constructor(private productsService: IProductsService) { }
@@ -42,12 +42,24 @@ class HttpServer {
   handleListProducts(): (req: Request, res: Response) => void {
     return (_req: Request, res: Response) => {
       const body = new ListProductRequest();
-      const [error, result]  = this.productsService.list(body);
+      const [error, result] = this.productsService.list(body);
       if (error) {
         res.status(500).send(error);
         return;
       }
       res.status(201).send(result!.products);
+    }
+  };
+
+  handleGetProduct(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      const body = new GetProductRequest(req.params.id);
+      const [error, result] = this.productsService.get(body);
+      if (error) {
+        res.status(500).send(error);
+        return;
+      }
+      res.status(201).send(result!.product);
     }
   };
 }

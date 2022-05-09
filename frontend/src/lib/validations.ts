@@ -1,7 +1,7 @@
 import { Product } from "./models";
 
 export class Validate {
-  static createProduct(product: Product): [Error?, boolean?] {
+  static saveProduct(product: Product): [Error?, boolean?] {
     if (!product.code.length) {
       return [new Error("code is required"), false];
     }

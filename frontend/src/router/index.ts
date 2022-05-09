@@ -32,6 +32,14 @@ const routes: Array<RouteConfig> = [
         /* webpackChunkName: "product-add-view" */ "../views/ProductAddView.vue"
       ),
   },
+  {
+    path: "/products/:id",
+    name: "products-edit",
+    component: () =>
+      import(
+        /* webpackChunkName: "product-edit-view" */ "../views/ProductEditView.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({

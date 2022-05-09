@@ -10,8 +10,27 @@ import { Validate } from "./validations";
 export class ProductService implements IProductService {
   constructor(private http: HttpClient) {}
 
+  async get(productId: string): Promise<[Error?, Product?]> {
+    const [err, res] = await this.http.get<string, HttpResponse<Product>>(
+      `/products/${productId}`,
+      undefined
+    );
+    if (err) {
+      return [err];
+    }
+    if (res && res.status === 201) {
+      return [undefined, res.data];
+    }
+    return [undefined, undefined];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async update(_product: Product): Promise<[Error?, string?]> {
+    return [undefined, ""];
+  }
+
   async create(product: Product): Promise<[Error?, string?]> {
-    const [error, isValid] = Validate.createProduct(product);
+    const [error, isValid] = Validate.saveProduct(product);
     if (!isValid) {
       return [error];
     }
@@ -29,13 +48,14 @@ export class ProductService implements IProductService {
       return [err];
     }
     if (res && res.status === 201) {
-      return [undefined, res!.data.code];
+      return [undefined, res?.data.code];
     }
 
     return [undefined, ""];
   }
 
   async list(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _params?: ListProductParams
   ): Promise<[Error?, ListProductResponse?]> {
     const [err, res] = await this.http.get<Product[], HttpResponse<Product[]>>(
@@ -46,7 +66,7 @@ export class ProductService implements IProductService {
       return [err];
     }
     if (res && res.status === 201) {
-      return [undefined, new ListProductResponse(res!.data)];
+      return [undefined, new ListProductResponse(res?.data)];
     }
 
     return [undefined, new ListProductResponse([] as Product[])];

@@ -31,7 +31,7 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   },
   methods: {
     save() {
-      const [error, isValid] = Validate.createProduct(this.product);
+      const [error, isValid] = Validate.saveProduct(this.product);
       if (!isValid) {
         return [error];
       }

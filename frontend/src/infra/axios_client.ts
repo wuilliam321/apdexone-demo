@@ -7,7 +7,7 @@ const http = axios.create({
 });
 
 export class AxiosClient implements HttpClient {
-  async post<T = any, U = any, D = any>(
+  async post<T = unknown, U = unknown, D = unknown>(
     uri: string,
     _config?: D,
     body?: T
@@ -15,8 +15,9 @@ export class AxiosClient implements HttpClient {
     const res = await http.post<T, U>(uri, body);
     return [undefined, res];
   }
-  async get<T = any, U = any, D = any>(
+  async get<T = unknown, U = unknown, D = unknown>(
     uri: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _config?: D
   ): Promise<[Error?, U?]> {
     const res = await http.get<T, U, D>(uri);

@@ -21,6 +21,14 @@ class ProductsLokiDatasource implements IProductsDatasource {
     const res = this.products.find();
     return [, res];
   }
+
+  getByCode(code: string): [Error?, Product?] {
+    const res = this.products.findOne({ code });
+    if (!res) {
+      return [new Error(`Failed to get product by code ${code}`),];
+    }
+    return [, res];
+  }
 }
 
 export default ProductsLokiDatasource;

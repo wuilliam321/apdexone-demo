@@ -1,6 +1,6 @@
 import { IProductsDatasource, IProductsService } from "../lib/interfaces";
 import { Product } from "../lib/models";
-import { CreateProductRequest, CreateProductResponse, ListProductRequest, ListProductResponse } from "../srv/models";
+import { CreateProductRequest, CreateProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse } from "../srv/models";
 
 class ProductsService implements IProductsService {
   constructor(private productsDS: IProductsDatasource) {}
@@ -35,6 +35,14 @@ class ProductsService implements IProductsService {
       return [error,];
     }
     return [, new ListProductResponse(products!)];
+  }
+
+  get(req: GetProductRequest): [Error?, GetProductResponse?] {
+    const [error, product]= this.productsDS.getByCode(req.code);
+    if (error) {
+      return [error,];
+    }
+    return [, new GetProductResponse(product!)];
   }
 }
 

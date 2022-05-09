@@ -43,6 +43,13 @@ export class CreateProductRequest {
   }
 }
 
+export class GetProductRequest {
+  constructor(public code: string) {}
+}
+export class GetProductResponse {
+  constructor(public product: Product) {}
+}
+
 export class ListProductRequest {}
 export class ListProductResponse {
   constructor(private _products: Product[]) {}

@@ -1,26 +1,25 @@
 import { HttpClient } from "@/lib/http";
-import {
-  IProductService,
-  ListProductResponse,
-} from "@/lib/interfaces";
+import { IProductService, ListProductResponse } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { ProductService } from "@/lib/product_service";
 
 const newHttpMock = () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post: jest.fn((): Promise<any> => {
     const response = {
       status: 201,
       data: { code: "123" },
     };
-    return Promise.resolve([, response]);
+    return Promise.resolve([undefined, response]);
   }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get: jest.fn((): Promise<any> => {
     const products = [new Product("123", "test", 1000)];
     const response = {
       status: 201,
       data: products,
     };
-    return Promise.resolve([, response]);
+    return Promise.resolve([undefined, response]);
   }),
 });
 
@@ -94,4 +93,56 @@ describe("Products: list", () => {
     const [error] = await productService.list();
     expect(error).toBeInstanceOf(Error);
   });
+});
+
+describe("Products: get", () => {
+  let httpClient: HttpClient;
+  let productService: IProductService;
+
+  beforeEach(() => {
+    httpClient = newHttpMock();
+    httpClient.get = jest.fn((): Promise<any> => {
+      const product = new Product("123", "test", 1000);
+      const response = {
+        status: 201,
+        data: product,
+      };
+      return Promise.resolve([undefined, response]);
+    });
+    productService = new ProductService(httpClient);
+  });
+
+  it("given a valid product id, should return the given product", async () => {
+    const productCode = "123";
+    const [, res] = await productService.get(productCode);
+    expect(res).toEqual({ code: "123", name: "test", price: 1000 });
+    expect(httpClient.get).toBeCalledWith(
+      `/products/${productCode}`,
+      undefined
+    );
+  });
+
+  it("given an error while getting, should return error", async () => {
+    httpClient.get = (): Promise<any> => Promise.resolve([new Error("error")]);
+    const [error] = await productService.get("1234");
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  // it("given an invalid product, should return error", async () => {
+  //   const product = new Product("", "name", 1000);
+  //   const [error] = await productService.create(product);
+  //   expect(error).toBeInstanceOf(Error);
+  // });
+
+  // it("given an invalid name, should return error", async () => {
+  //   const product = new Product("123", "", 1000);
+  //   const [error] = await productService.create(product);
+  //   expect(error).toBeInstanceOf(Error);
+  // });
+
+  // it("given an invalid price, should return error", async () => {
+  //   const product = new Product("123", "name", 0);
+  //   const [error] = await productService.create(product);
+  //   expect(error).toBeInstanceOf(Error);
+  // });
 });
