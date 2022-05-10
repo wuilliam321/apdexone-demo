@@ -26,6 +26,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.get('/products/:id', server.handleGetProduct());
+app.put('/products/:id', server.handleUpdateProduct());
 app.get('/products', server.handleListProducts());
 app.post('/products', server.handleCreateProduct());
 }

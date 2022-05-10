@@ -24,8 +24,28 @@ export class ProductService implements IProductService {
     return [undefined, undefined];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async update(_product: Product): Promise<[Error?, string?]> {
+  async update(product: Product): Promise<[Error?, string?]> {
+    const [error, isValid] = Validate.saveProduct(product);
+    if (!isValid) {
+      return [error];
+    }
+
+    const [err, res] = await this.http.put<Product, HttpResponse<Product>>(
+      `/products/${product.code}`,
+      undefined,
+      {
+        code: product.code,
+        name: product.name,
+        price: product.price,
+      }
+    );
+    if (err) {
+      return [err];
+    }
+    if (res && res.status === 201) {
+      return [undefined, res?.data.code];
+    }
+
     return [undefined, ""];
   }
 

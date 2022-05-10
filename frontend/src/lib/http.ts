@@ -17,4 +17,9 @@ export interface HttpClient {
     uri: string,
     config?: D
   ): Promise<[Error?, U?]>;
+  put<T = any, U = any, D = any>(
+    uri: string,
+    config?: D,
+    body?: T
+  ): Promise<[Error?, U?]>;
 }

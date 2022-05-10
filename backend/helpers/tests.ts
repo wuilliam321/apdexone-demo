@@ -15,4 +15,9 @@ export class DatasourceMock implements IProductsDatasource {
   getByCode(code: string): [Error?, Product?] {
     return [, new Product(code, "iPhone", 1000)];
   }
+
+  edit(product: Product): [Error?, Product?] {
+    return [,product];
+  }
+
 }

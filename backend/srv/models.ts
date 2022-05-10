@@ -1,7 +1,7 @@
 import { Product } from "../lib/models";
 
 export class CreateProductResponse {
-  constructor(private _code: string) {}
+  constructor(private _code: string) { }
 
   toJSON(): Object {
     return {
@@ -44,15 +44,15 @@ export class CreateProductRequest {
 }
 
 export class GetProductRequest {
-  constructor(public code: string) {}
+  constructor(public code: string) { }
 }
 export class GetProductResponse {
-  constructor(public product: Product) {}
+  constructor(public product: Product) { }
 }
 
-export class ListProductRequest {}
+export class ListProductRequest { }
 export class ListProductResponse {
-  constructor(private _products: Product[]) {}
+  constructor(private _products: Product[]) { }
 
   toJSON(): Object {
     return {
@@ -63,4 +63,12 @@ export class ListProductResponse {
   get products(): Product[] {
     return this._products;
   }
+}
+
+export class UpdateProductResponse {
+  constructor(public code: string) { }
+}
+
+export class UpdateProductRequest {
+  constructor(public code: string, public name: string, public price: number) { }
 }
