@@ -10,7 +10,8 @@
       {{ product.price }}
     </div>
     <div class="col product-item__actions">
-      <ProductEditButton :productId="product.code" /> | Delete
+      <ProductEditButton :productId="product.code" /> |
+      <ProductDeleteButton :productId="product.code" />
     </div>
   </div>
 </template>
@@ -19,11 +20,13 @@
 import { Product } from "@/lib/models";
 import Vue, { PropType } from "vue";
 import ProductEditButton from "@/components/ProductEditButton.vue";
+import ProductDeleteButton from "@/components/ProductDeleteButton.vue";
 
 export default Vue.extend({
   name: "ProductListItem",
   components: {
     ProductEditButton,
+    ProductDeleteButton,
   },
   props: {
     product: {

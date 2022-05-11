@@ -2,9 +2,11 @@ import { mount, Wrapper } from "@vue/test-utils";
 import ProductEditForm from "@/components/ProductEditForm.vue";
 import { IProductService, ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
-import { mockRoute, mockRouter, newProductServiceMock } from "./helpers";
+import { newMockRoute, newMockRouter, newProductServiceMock } from "./helpers";
 
 describe("ProductEditForm.vue", () => {
+  let mockRoute: any;
+  let mockRouter: any;
   let products: Product[];
   let productService: IProductService;
   let wrapper: Wrapper<Vue, Element>;
@@ -15,6 +17,8 @@ describe("ProductEditForm.vue", () => {
   let submitButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
+    mockRoute = newMockRoute();
+    mockRouter = newMockRouter();
     products = [new Product("1234", "name", 1000)];
     productService = newProductServiceMock(products);
     wrapper = mount(ProductEditForm, {

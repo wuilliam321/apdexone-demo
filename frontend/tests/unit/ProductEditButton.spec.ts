@@ -1,12 +1,16 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import ProductEditButton from "@/components/ProductEditButton.vue";
-import { mockRoute, mockRouter } from "./helpers";
+import { newMockRoute, newMockRouter } from "./helpers";
 
 describe("ProductEditButton.vue", () => {
+  let mockRoute: any;
+  let mockRouter: any;
   let wrapper: Wrapper<Vue, Element>;
   let editButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
+    mockRoute = newMockRoute();
+    mockRouter = newMockRouter();
     wrapper = mount(ProductEditButton, {
       mocks: {
         $route: mockRoute,

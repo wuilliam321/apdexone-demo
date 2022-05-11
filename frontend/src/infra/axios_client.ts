@@ -31,4 +31,12 @@ export class AxiosClient implements HttpClient {
     const res = await http.put<T, U>(uri, body);
     return [undefined, res];
   }
+  async delete<T = unknown, U = unknown, D = unknown>(
+    uri: string,
+    _config?: D,
+    body?: T
+  ): Promise<[Error?, U?]> {
+    const res = await http.delete<T, U>(uri, body);
+    return [undefined, res];
+  }
 }

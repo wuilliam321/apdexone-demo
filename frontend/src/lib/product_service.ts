@@ -91,4 +91,21 @@ export class ProductService implements IProductService {
 
     return [undefined, new ListProductResponse([] as Product[])];
   }
+
+  async delete(productId: string): Promise<[Error?, string?]> {
+    if (productId === "") {
+      return [new Error("Product code is required")];
+    }
+    const [err, res] = await this.http.delete<string, HttpResponse<Product>>(
+      `/products/${productId}`,
+      undefined
+    );
+    if (err) {
+      return [err];
+    }
+    if (res && res.status === 201) {
+      return [undefined, res?.data.code];
+    }
+    return [undefined, undefined];
+  }
 }

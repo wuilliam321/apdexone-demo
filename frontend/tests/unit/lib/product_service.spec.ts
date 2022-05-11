@@ -29,6 +29,14 @@ const newHttpMock = () => ({
     };
     return Promise.resolve([undefined, response]);
   }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  delete: jest.fn((): Promise<any> => {
+    const response = {
+      status: 201,
+      data: { code: "123" },
+    };
+    return Promise.resolve([undefined, response]);
+  }),
 });
 
 describe("Products: create", () => {
@@ -180,6 +188,34 @@ describe("Products: update", () => {
     httpClient.put = (): Promise<any> => Promise.resolve([new Error("error")]);
     const product = new Product("123", "name", 1000);
     const [error] = await productService.update(product);
+    expect(error).toBeInstanceOf(Error);
+  });
+});
+
+describe("Products: delete", () => {
+  let httpClient: HttpClient;
+  let productService: IProductService;
+
+  beforeEach(() => {
+    httpClient = newHttpMock();
+    productService = new ProductService(httpClient);
+  });
+
+  it("given a valid product code, should delete it", async () => {
+    const productCode = "123";
+    const [, res] = await productService.delete(productCode);
+    expect(res).toBe(productCode);
+    expect(httpClient.delete).toBeCalledWith("/products/123", undefined);
+  });
+
+  it("given an invalid product code, should return error", async () => {
+    const [error] = await productService.delete("");
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  it("given an error while creating, should return error", async () => {
+    httpClient.delete = (): Promise<any> => Promise.resolve([new Error("error")]);
+    const [error] = await productService.delete("123");
     expect(error).toBeInstanceOf(Error);
   });
 });

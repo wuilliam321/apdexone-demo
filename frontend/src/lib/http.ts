@@ -22,4 +22,9 @@ export interface HttpClient {
     config?: D,
     body?: T
   ): Promise<[Error?, U?]>;
+  delete<T = any, U = any, D = any>(
+    uri: string,
+    config?: D,
+    body?: T
+  ): Promise<[Error?, U?]>;
 }

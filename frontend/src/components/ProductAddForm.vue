@@ -30,13 +30,20 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
     };
   },
   methods: {
-    save() {
+    async save() {
       const [error, isValid] = Validate.saveProduct(this.product);
       if (!isValid) {
         return [error];
       }
-      this.productService.create(this.product);
-      this.$router.push("/products");
+      const [err, response] = await this.productService.create(this.product);
+      // TODO: missing on error
+      if (err) {
+        /* this.error = error; */
+        return;
+      }
+      if (response) {
+        this.$router.push("/products");
+      }
     },
   },
 });

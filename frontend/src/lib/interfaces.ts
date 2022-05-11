@@ -24,4 +24,5 @@ export interface IProductService {
   create(product: Product): Promise<[Error?, string?]>;
   update(product: Product): Promise<[Error?, string?]>;
   get(productId: string): Promise<[Error?, Product?]>;
+  delete(productId: string): Promise<[Error?, string?]>;
 }
