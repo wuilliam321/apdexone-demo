@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import HttpServer from './http';
-import { CreateProductRequest, CreateProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, UpdateProductRequest, UpdateProductResponse } from './models';
+import { CreateProductRequest, CreateProductResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, UpdateProductRequest, UpdateProductResponse } from './models';
 import { DatasourceMock } from '../helpers/tests';
 import { Product } from '../lib/models';
 import ProductsService from '../lib/products_service';
@@ -289,6 +289,55 @@ describe('ProductsHttp Update', () => {
         code: '123',
         name: 'valid',
         price: 100,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.send).toHaveBeenCalledWith({message: "test"});
+  });
+});
+
+describe('ProductsHttp Delete', () => {
+  let server: HttpServer;
+  let service: IProductsService;
+  let handler: (req: any, res: any) => void;
+
+  beforeEach(() => {
+    service = new ProductsService(new DatasourceMock());
+    server = new HttpServer(service);
+    handler = server.handleDeleteProduct();
+  });
+
+  test('given a product, should delete it', () => {
+    const req = getMockReq({
+      params: {
+        id: '123',
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledTimes(1);
+  });
+
+  test('given an invalid code, should return 400 error', () => {
+    const req = getMockReq({
+      params: {
+        id: '',
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an internal error, should return 500 error', () => {
+    service.delete = (_req: DeleteProductRequest): [Error?, DeleteProductResponse?] => {
+      return [new Error('test'),];
+    };
+    const req = getMockReq({
+      params: {
+        id: '123',
       },
     });
     const { res } = getMockRes();

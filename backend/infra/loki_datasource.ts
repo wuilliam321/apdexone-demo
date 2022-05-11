@@ -63,6 +63,21 @@ class ProductsLokiDatasource implements IProductsDatasource {
     }
   }
 
+  delete(code: string): [Error?, string?] {
+    try {
+      const p = this.products.by('code', code);
+      if (!p) {
+        return [new Error('Failed to get product for delete'),];
+      }
+      const res = this.products.remove(p);
+      if (!res) {
+        return [new Error('Failed to delete product'),];
+      }
+      return [, res.code];
+    } catch (e) {
+      return [this.handleError(e as Error),];
+    }
+  }
 
   handleError(e: Error): Error {
     const message = e instanceof Error ? e.message : "Unknown error";

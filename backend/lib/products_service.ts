@@ -1,6 +1,6 @@
 import { IProductsDatasource, IProductsService } from "../lib/interfaces";
 import { Product } from "../lib/models";
-import { CreateProductRequest, CreateProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, UpdateProductRequest, UpdateProductResponse } from "../srv/models";
+import { CreateProductRequest, CreateProductResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, UpdateProductRequest, UpdateProductResponse } from "../srv/models";
 
 class ProductsService implements IProductsService {
   constructor(private productsDS: IProductsDatasource) { }
@@ -65,6 +65,21 @@ class ProductsService implements IProductsService {
     }
 
     const response = new UpdateProductResponse(result!.code);
+
+    return [, response];
+  }
+
+  delete(req: DeleteProductRequest): [Error?, DeleteProductResponse?] {
+    if (req.code.length === 0) {
+      return [new Error("code is required"),];
+    }
+
+    const [error, result] = this.productsDS.delete(req.code);
+    if (error) {
+      return [error,];
+    }
+
+    const response = new DeleteProductResponse(result!);
 
     return [, response];
   }

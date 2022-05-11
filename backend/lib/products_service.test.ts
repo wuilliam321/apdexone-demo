@@ -2,7 +2,7 @@ import ProductsService from './products_service';
 import { Product } from '../lib/models';
 import { DatasourceMock } from '../helpers/tests';
 import { IProductsDatasource, IProductsService } from '../lib/interfaces';
-import { CreateProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from '../srv/models';
+import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from '../srv/models';
 
 describe("Products Create", () => {
   let dsMock: IProductsDatasource;
@@ -144,6 +144,36 @@ describe("Products Update", () => {
     dsMock.edit = (_product: Product): [Error?, Product?] => [new Error("error"),];
     productsService = new ProductsService(dsMock);
     const [error,] = productsService.update(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+});
+
+describe("Products Delete", () => {
+  let dsMock: IProductsDatasource;
+  let productsService: IProductsService;
+  let request: DeleteProductRequest;
+
+  beforeEach(() => {
+    dsMock = new DatasourceMock();
+    productsService = new ProductsService(dsMock);
+    request = new DeleteProductRequest("a_code")
+  });
+
+  test("delete", () => {
+    const [, response] = productsService.delete(request);
+    expect(response!.code).toBe("a_code");
+  });
+
+  test("given an invalid code, should return error", () => {
+    request.code = "";
+    const [error,] = productsService.delete(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  test("given an error in datasource while saving product, should return error", () => {
+    dsMock.delete = (_code: string): [Error?, string?] => [new Error("error"),];
+    productsService = new ProductsService(dsMock);
+    const [error,] = productsService.delete(request);
     expect(error).toBeInstanceOf(Error);
   });
 });

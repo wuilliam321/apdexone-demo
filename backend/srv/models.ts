@@ -46,6 +46,7 @@ export class CreateProductRequest {
 export class GetProductRequest {
   constructor(public code: string) { }
 }
+
 export class GetProductResponse {
   constructor(public product: Product) { }
 }
@@ -71,4 +72,12 @@ export class UpdateProductResponse {
 
 export class UpdateProductRequest {
   constructor(public code: string, public name: string, public price: number) { }
+}
+
+export class DeleteProductRequest {
+  constructor(public code: string) { }
+}
+
+export class DeleteProductResponse {
+  constructor(public code: string) { }
 }

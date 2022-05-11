@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IProductsService } from '../lib/interfaces';
-import { CreateProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from './models';
+import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from './models';
 
 class HttpServer {
   constructor(private productsService: IProductsService) { }
@@ -31,7 +31,7 @@ class HttpServer {
 
       const [error, result] = this.productsService.create(body);
       if (error) {
-        res.status(400).send({message: error.message});
+        res.status(400).send({ message: error.message });
         return;
       }
 
@@ -56,7 +56,7 @@ class HttpServer {
       const body = new GetProductRequest(req.params.id);
       const [error, result] = this.productsService.get(body);
       if (error) {
-        res.status(500).send({message: error.message});
+        res.status(500).send({ message: error.message });
         return;
       }
       res.status(201).send(result!.product);
@@ -89,7 +89,26 @@ class HttpServer {
 
       const [error, result] = this.productsService.update(body);
       if (error) {
-        res.status(500).send({message: error.message});
+        res.status(500).send({ message: error.message });
+        return;
+      }
+
+      res.status(201).send(result);
+    }
+  }
+
+  handleDeleteProduct(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      if (!req.params.id || req.params.id === '') {
+        res.status(400).send('code is required');
+        return;
+      }
+
+      const body = new DeleteProductRequest(req.params.id);
+
+      const [error, result] = this.productsService.delete(body);
+      if (error) {
+        res.status(500).send({ message: error.message });
         return;
       }
 

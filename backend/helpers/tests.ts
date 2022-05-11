@@ -20,4 +20,7 @@ export class DatasourceMock implements IProductsDatasource {
     return [,product];
   }
 
+  delete(code: string): [Error?, string?] {
+    return [, code];
+  }
 }

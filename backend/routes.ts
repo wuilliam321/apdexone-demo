@@ -29,6 +29,7 @@ app.get('/products/:id', server.handleGetProduct());
 app.put('/products/:id', server.handleUpdateProduct());
 app.get('/products', server.handleListProducts());
 app.post('/products', server.handleCreateProduct());
+app.delete('/products/:id', server.handleDeleteProduct());
 }
 
 export default routes;
