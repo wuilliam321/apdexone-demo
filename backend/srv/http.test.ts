@@ -144,8 +144,7 @@ describe('ProductsHttp List', () => {
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith(new Error('test'));
-    // expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({message: "test"});
   });
 
 

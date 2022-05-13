@@ -34,6 +34,7 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   methods: {
     async fetchProducts() {
       const params = new ListProductParams();
+      // TODO: refresh on delete??
       const [error, response] = await this.productService.list(params);
       if (error) {
         this.error = error;

@@ -8,22 +8,22 @@ class HttpServer {
   handleCreateProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
       if (!req.body) {
-        res.status(400).send('body is required');
+        res.status(400).send({ message: 'body is required' });
         return;
       }
 
       if (!req.body.code) {
-        res.status(400).send('code is required');
+        res.status(400).send({ message: 'code is required' });
         return;
       }
 
       if (!req.body.name) {
-        res.status(400).send('name is required');
+        res.status(400).send({ message: 'name is required'});
         return;
       }
 
       if (!req.body.price || req.body.price <= 0) {
-        res.status(400).send('price is required');
+        res.status(400).send({ message:'price is required'});
         return;
       }
 
@@ -31,7 +31,7 @@ class HttpServer {
 
       const [error, result] = this.productsService.create(body);
       if (error) {
-        res.status(400).send({ message: error.message });
+        res.status(500).send({ message: error.message });
         return;
       }
 
@@ -44,7 +44,7 @@ class HttpServer {
       const body = new ListProductRequest();
       const [error, result] = this.productsService.list(body);
       if (error) {
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message });
         return;
       }
       res.status(201).send(result!.products);
@@ -66,22 +66,22 @@ class HttpServer {
   handleUpdateProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
       if (!req.body) {
-        res.status(400).send('body is required');
+        res.status(400).send({ message: 'body is required' });
         return;
       }
 
       if (!req.body.code) {
-        res.status(400).send('code is required');
+        res.status(400).send({ message: 'code is required'});
         return;
       }
 
       if (!req.body.name) {
-        res.status(400).send('name is required');
+        res.status(400).send({ message:'name is required'});
         return;
       }
 
       if (!req.body.price || req.body.price <= 0) {
-        res.status(400).send('price is required');
+        res.status(400).send({ message:'price is required'});
         return;
       }
 
@@ -100,7 +100,7 @@ class HttpServer {
   handleDeleteProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
       if (!req.params.id || req.params.id === '') {
-        res.status(400).send('code is required');
+        res.status(400).send({ message: 'code is required'});
         return;
       }
 
