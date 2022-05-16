@@ -7,7 +7,7 @@
           <input
             type="text"
             name="code"
-            v-model="product.code"
+            v-model="productForSave.code"
             class="form-control"
             aria-describedby="codeHelp"
           />
@@ -21,7 +21,7 @@
           <input
             type="text"
             name="name"
-            v-model="product.name"
+            v-model="productForSave.name"
             class="form-control"
             aria-describedby="nameHelp"
           />
@@ -35,7 +35,7 @@
           <input
             type="number"
             name="price"
-            v-model="product.price"
+            v-model="productForSave.price"
             class="form-control"
             aria-describedby="priceHelp"
           />
@@ -56,37 +56,31 @@
 </template>
 
 <script lang="ts">
-import { ServiceInjection } from "@/lib/interfaces";
+import Vue, { PropType } from "vue";
 import { Product } from "@/lib/models";
-import { Validate } from "@/lib/validations";
-import Vue, { VueConstructor } from "vue";
 
-export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
-  name: "ProductAddForm",
-  inject: ["productService"],
+export default Vue.extend({
+  name: "ProductForm",
+  props: {
+    product: {
+      type: Object as PropType<Product>,
+      required: true,
+    },
+  },
   data() {
     return {
-      product: new Product("", "", 0),
+      productForSave: new Product("", "", 0),
     };
   },
+  created() {
+    this.productForSave = { ...this.product };
+  },
   methods: {
-    async save() {
-      const [error, isValid] = Validate.saveProduct(this.product);
-      if (!isValid) {
-        return [error];
-      }
-      const [err, response] = await this.productService.create(this.product);
-      // TODO: missing on error
-      if (err) {
-        /* this.error = error; */
-        return;
-      }
-      if (response) {
-        this.$router.push("/products");
-      }
+    save() {
+      this.$emit("submit", this.productForSave);
     },
     goBack() {
-      this.$router.push("/products");
+      this.$emit("cancel");
     },
   },
 });

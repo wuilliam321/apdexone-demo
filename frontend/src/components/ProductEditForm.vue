@@ -1,18 +1,11 @@
 <template>
   <div>
-    <form @submit.prevent="save">
-      <label for="code">
-        Code: <input type="text" name="code" v-model="productForUpdate.code" />
-      </label>
-      <label for="name">
-        Name: <input type="text" name="name" v-model="productForUpdate.name" />
-      </label>
-      <label for="price">
-        Price:
-        <input type="number" name="price" v-model="productForUpdate.price" />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <ProductForm
+      v-if="productForUpdate.code"
+      :product="productForUpdate"
+      @submit="handleSubmit"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -21,8 +14,10 @@ import Vue, { VueConstructor } from "vue";
 import { ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { Validate } from "@/lib/validations";
+import ProductForm from "./ProductForm.vue";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
+  components: { ProductForm },
   name: "ProductEditForm",
   inject: ["productService"],
   props: {
@@ -53,6 +48,17 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
         return [error];
       }
       this.productService.update(this.productForUpdate);
+      this.$router.push("/products");
+    },
+    async handleSubmit(product: Product) {
+      const [error, isValid] = Validate.saveProduct(product);
+      if (!isValid) {
+        return [error];
+      }
+      await this.productService.update(product);
+      this.$router.push("/products");
+    },
+    handleCancel() {
       this.$router.push("/products");
     },
   },

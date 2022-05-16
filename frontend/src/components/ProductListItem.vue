@@ -1,19 +1,21 @@
 <template>
-  <div class="row product-item">
-    <div class="col product-item__code">
+  <tr class="product-item">
+    <td class="product-item__code">
       {{ product.code }}
-    </div>
-    <div class="col product-item__name">
+    </td>
+    <td class="product-item__name">
       {{ product.name }}
-    </div>
-    <div class="col product-item__price">
+    </td>
+    <td class="product-item__price">
       {{ product.price }}
-    </div>
-    <div class="col product-item__actions">
-      <ProductEditButton :productId="product.code" /> |
-      <ProductDeleteButton :productId="product.code" />
-    </div>
-  </div>
+    </td>
+    <td class="product-item__actions">
+      <div class="btn-group" role="group" aria-label="Actions">
+        <ProductEditButton :productId="product.code" />
+        <ProductDeleteButton :productId="product.code" />
+      </div>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts">

@@ -15,6 +15,7 @@ describe("ProductAddForm.vue", () => {
   let nameInput: Wrapper<Vue, Element>;
   let priceInput: Wrapper<Vue, Element>;
   let submitButton: Wrapper<Vue, Element>;
+  let cancelButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
     mockRoute = newMockRoute();
@@ -35,6 +36,7 @@ describe("ProductAddForm.vue", () => {
     nameInput = wrapper.find("input[name=name]");
     priceInput = wrapper.find("input[name=price]");
     submitButton = wrapper.find("button[type=submit]");
+    cancelButton = wrapper.find("button[type=button]");
     codeInput.setValue("1234");
     nameInput.setValue("a product");
     priceInput.setValue("1000");
@@ -46,6 +48,7 @@ describe("ProductAddForm.vue", () => {
     expect(nameInput.exists()).toBe(true);
     expect(priceInput.exists()).toBe(true);
     expect(submitButton.exists()).toBe(true);
+    expect(cancelButton.exists()).toBe(true);
   });
 
   it("should create product on valid form submit", (done) => {
@@ -80,5 +83,10 @@ describe("ProductAddForm.vue", () => {
       expect(mockRouter.push).toHaveBeenCalledTimes(0);
       done();
     });
+  });
+
+  it("should shoud go back on cancel", () => {
+    cancelButton.trigger("click");
+    expect(mockRouter.push).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button type="button" role="button" @click="goToProductAdd">
+    <button
+      type="button"
+      role="button"
+      @click="goToProductAdd"
+      class="btn btn-primary"
+    >
       Add product
     </button>
   </div>

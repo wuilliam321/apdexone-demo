@@ -1,7 +1,12 @@
 <template>
-  <div>
-    <button type="button" role="button" @click="goToProductEdit">Edit</button>
-  </div>
+  <button
+    type="button"
+    role="button"
+    @click="goToProductEdit"
+    class="btn btn-primary btn-sm"
+  >
+    Edit
+  </button>
 </template>
 
 <script lang="ts">

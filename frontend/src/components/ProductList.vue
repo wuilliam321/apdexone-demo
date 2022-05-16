@@ -1,14 +1,25 @@
 <template>
-  <div>
-    <div class="row product-list">
-      <div class="col product-list__header">code</div>
-      <div class="col product-list__header">name</div>
-      <div class="col product-list__header">price</div>
-      <div class="col product-list__header">actions</div>
+  <div class="row">
+    <div class="col">
+      <table class="table product-list">
+        <thead>
+          <tr>
+            <td class="product-list__header">code</td>
+            <td class="product-list__header">name</td>
+            <td class="product-list__header">price</td>
+            <td class="product-list__header">actions</td>
+          </tr>
+        </thead>
+        <tbody class="product-item">
+          <template v-for="product in products">
+            <ProductListItem
+              :key="product.code"
+              :product="product"
+            ></ProductListItem>
+          </template>
+        </tbody>
+      </table>
     </div>
-    <template v-for="product in products">
-      <ProductListItem :key="product.code" :product="product"></ProductListItem>
-    </template>
   </div>
 </template>
 

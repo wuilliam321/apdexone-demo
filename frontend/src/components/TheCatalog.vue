@@ -1,7 +1,7 @@
 <template>
   <div>
+    <TheToolbar />
     <TheErrorMessage v-if="error" :error="error" />
-    <ProductAddButton />
     <ProductList :products="products" />
   </div>
 </template>
@@ -9,16 +9,16 @@
 <script lang="ts">
 import Vue, { VueConstructor } from "vue";
 import ProductList from "@/components/ProductList.vue";
-import ProductAddButton from "@/components/ProductAddButton.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
 import { ListProductParams, ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
+import TheToolbar from "./TheToolbar.vue";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   name: "TheCatalog",
   components: {
     ProductList,
-    ProductAddButton,
+    TheToolbar,
     TheErrorMessage,
   },
   inject: ["productService"],

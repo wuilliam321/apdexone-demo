@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <button type="button" role="button" @click="goToProductDelete">
-      Delete
-    </button>
-  </div>
+  <button
+    type="button"
+    role="button"
+    @click="goToProductDelete"
+    class="btn btn-danger btn-sm"
+  >
+    Delete
+  </button>
 </template>
 
 <script lang="ts">
