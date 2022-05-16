@@ -1,5 +1,6 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import ProductAddForm from "@/components/ProductAddForm.vue";
+import ProductForm from "@/components/ProductForm.vue";
 import { IProductService, ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { newMockRoute, newMockRouter, newProductServiceMock } from "./helpers";
@@ -7,21 +8,16 @@ import { newMockRoute, newMockRouter, newProductServiceMock } from "./helpers";
 describe("ProductAddForm.vue", () => {
   let mockRoute: any;
   let mockRouter: any;
-  let products: Product[];
+  let product: Product;
   let productService: IProductService;
   let wrapper: Wrapper<Vue, Element>;
   let form: Wrapper<Vue, Element>;
-  let codeInput: Wrapper<Vue, Element>;
-  let nameInput: Wrapper<Vue, Element>;
-  let priceInput: Wrapper<Vue, Element>;
-  let submitButton: Wrapper<Vue, Element>;
-  let cancelButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
     mockRoute = newMockRoute();
     mockRouter = newMockRouter();
-    products = [new Product("1234", "name", 1000)];
-    productService = newProductServiceMock(products);
+    product = new Product("1234", "name", 1000);
+    productService = newProductServiceMock([product]);
     wrapper = mount(ProductAddForm, {
       provide(): ServiceInjection {
         return { productService };
@@ -30,63 +26,46 @@ describe("ProductAddForm.vue", () => {
         $route: mockRoute,
         $router: mockRouter,
       },
+      components: {
+        ProductForm,
+      },
+      data() {
+        return {
+          productForCreate: product,
+        };
+      },
     });
     form = wrapper.find("form");
-    codeInput = wrapper.find("input[name=code]");
-    nameInput = wrapper.find("input[name=name]");
-    priceInput = wrapper.find("input[name=price]");
-    submitButton = wrapper.find("button[type=submit]");
-    cancelButton = wrapper.find("button[type=button]");
-    codeInput.setValue("1234");
-    nameInput.setValue("a product");
-    priceInput.setValue("1000");
   });
 
   it("should render a form", () => {
     expect(form.exists()).toBe(true);
-    expect(codeInput.exists()).toBe(true);
-    expect(nameInput.exists()).toBe(true);
-    expect(priceInput.exists()).toBe(true);
-    expect(submitButton.exists()).toBe(true);
-    expect(cancelButton.exists()).toBe(true);
   });
 
-  it("should create product on valid form submit", (done) => {
-    submitButton.trigger("submit");
-    setTimeout(() => {
-      expect(productService.create).toHaveBeenCalledTimes(1);
-      expect(mockRouter.push).toHaveBeenCalledTimes(1);
-      expect(mockRouter.push).toHaveBeenCalledWith("/products");
-      done();
-    });
-  });
-
-  it("should fail on invalid product data", () => {
-    // TODO: show explicit error of form validations
-    codeInput.setValue("");
-    submitButton.trigger("submit");
+  it("should fail on invalid product data", async () => {
+    const priceInput = wrapper.find("input[name=price]");
+    await priceInput.setValue("");
+    const submitButton = wrapper.find("button[type=submit]");
+    await submitButton.trigger("submit");
     expect(productService.create).toHaveBeenCalledTimes(0);
     expect(mockRouter.push).toHaveBeenCalledTimes(0);
   });
 
-  it("should fail on invalid product data", (done) => {
-    productService.create = jest.fn(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      (_product: Product): Promise<[Error?, string?]> => {
-        return Promise.resolve([new Error("error"), ""]);
-      }
-    );
-    // TODO: show explicit error of form validations
-    submitButton.trigger("submit");
-    setTimeout(() => {
-      expect(productService.create).toHaveBeenCalledTimes(1);
-      expect(mockRouter.push).toHaveBeenCalledTimes(0);
-      done();
-    });
+  it("should create product on valid form submit", async () => {
+    const priceInput = wrapper.find("input[name=price]");
+    await priceInput.setValue("1000");
+    const submitButton = wrapper.find("button[type=submit]");
+    await submitButton.trigger("submit");
+    expect(productService.create).toHaveBeenCalledTimes(1);
+    expect(mockRouter.push).toHaveBeenCalledTimes(1);
+    expect(mockRouter.push).toHaveBeenCalledWith("/products");
   });
 
-  it("should shoud go back on cancel", () => {
-    cancelButton.trigger("click");
+  it("should return to list if cancel is pressed", async () => {
+    const cancelButton = wrapper.find("button[type=button]");
+    await cancelButton.trigger("click");
+    expect(productService.delete).toHaveBeenCalledTimes(0);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
+    expect(mockRouter.push).toHaveBeenCalledWith("/products");
   });
 });

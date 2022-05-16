@@ -1,91 +1,41 @@
 <template>
-  <div class="row">
-    <div class="offset-4 col-4">
-      <form @submit.prevent="save">
-        <div class="mb-3">
-          <label for="code" class="form-label">Code:</label>
-          <input
-            type="text"
-            name="code"
-            v-model="product.code"
-            class="form-control"
-            aria-describedby="codeHelp"
-          />
-          <div id="nameHelp" class="form-text">
-            Enter a unique code for the product
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="name" class="form-label">Name:</label>
-          <input
-            type="text"
-            name="name"
-            v-model="product.name"
-            class="form-control"
-            aria-describedby="nameHelp"
-          />
-          <div id="nameHelp" class="form-text">
-            Enter the name of the product
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="price" class="form-label">Price:</label>
-          <input
-            type="number"
-            name="price"
-            v-model="product.price"
-            class="form-control"
-            aria-describedby="priceHelp"
-          />
-          <div id="nameHelp" class="form-text">
-            Enter the price of the product
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <button type="submit" class="btn btn-primary mx-3">Submit</button>
-          <button type="button" class="btn btn-secondary mx-3" @click="goBack">
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
+  <div>
+    <ProductForm
+      :product="productForCreate"
+      @submit="handleSubmit"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import Vue, { VueConstructor } from "vue";
 import { ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { Validate } from "@/lib/validations";
-import Vue, { VueConstructor } from "vue";
+import ProductForm from "./ProductForm.vue";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   name: "ProductAddForm",
   inject: ["productService"],
+  components: {
+    ProductForm,
+  },
   data() {
     return {
-      product: new Product("", "", 0),
+      productForCreate: new Product("", "", 0),
     };
   },
   methods: {
-    async save() {
-      const [error, isValid] = Validate.saveProduct(this.product);
+    async handleSubmit(product: Product) {
+      const [error, isValid] = Validate.saveProduct(product);
       if (!isValid) {
         return [error];
       }
-      const [err, response] = await this.productService.create(this.product);
-      // TODO: missing on error
-      if (err) {
-        /* this.error = error; */
-        return;
-      }
-      if (response) {
-        this.$router.push("/products");
-      }
+      await this.productService.create(product);
+      this.$router.push("/products");
     },
-    goBack() {
+    handleCancel() {
       this.$router.push("/products");
     },
   },

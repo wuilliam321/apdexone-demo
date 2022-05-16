@@ -2,7 +2,7 @@
   <button
     type="button"
     role="button"
-    @click="goToProductDelete"
+    @click="goToDeleteConfirmation"
     class="btn btn-danger btn-sm"
   >
     Delete
@@ -23,17 +23,20 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
     },
   },
   methods: {
-    async goToProductDelete() {
-      const [error, response] = await this.productService.delete(
-        this.productId
-      );
-      if (error) {
-        /* this.error = error; */
-        return;
-      }
-      if (response) {
-        this.$router.push("/products");
-      }
+    /* async goToProductDelete() { */
+    /*   const [error, response] = await this.productService.delete( */
+    /*     this.productId */
+    /*   ); */
+    /*   if (error) { */
+    /*     /1* this.error = error; *1/ */
+    /*     return; */
+    /*   } */
+    /*   if (response) { */
+    /*     this.$router.push("/products"); */
+    /*   } */
+    /* }, */
+    goToDeleteConfirmation() {
+      this.$router.push(`/products/${this.productId}/delete`);
     },
   },
 });

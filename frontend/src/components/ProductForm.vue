@@ -45,8 +45,8 @@
         </div>
 
         <div class="mb-3">
-          <button type="submit" class="btn btn-primary mx-3">Submit</button>
-          <button type="button" class="btn btn-secondary mx-3" @click="goBack">
+          <button type="submit" class="btn btn-primary me-3">Submit</button>
+          <button type="button" class="btn btn-secondary" @click="goBack">
             Cancel
           </button>
         </div>

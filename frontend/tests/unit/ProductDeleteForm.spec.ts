@@ -1,11 +1,10 @@
 import { mount, Wrapper } from "@vue/test-utils";
-import ProductEditForm from "@/components/ProductEditForm.vue";
-import ProductForm from "@/components/ProductForm.vue";
+import ProductDeleteForm from "@/components/ProductDeleteForm.vue";
 import { IProductService, ServiceInjection } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { newMockRoute, newMockRouter, newProductServiceMock } from "./helpers";
 
-describe("ProductEditForm.vue", () => {
+describe("ProductDeleteForm.vue", () => {
   let mockRoute: any;
   let mockRouter: any;
   let product: Product;
@@ -18,7 +17,7 @@ describe("ProductEditForm.vue", () => {
     mockRouter = newMockRouter();
     product = new Product("1234", "name", 1000);
     productService = newProductServiceMock([product]);
-    wrapper = mount(ProductEditForm, {
+    wrapper = mount(ProductDeleteForm, {
       provide(): ServiceInjection {
         return { productService };
       },
@@ -29,12 +28,9 @@ describe("ProductEditForm.vue", () => {
       propsData: {
         productId: product.code,
       },
-      components: {
-        ProductForm,
-      },
       data() {
         return {
-          productForUpdate: product,
+          productForDelete: product,
         };
       },
     });
@@ -59,20 +55,11 @@ describe("ProductEditForm.vue", () => {
     expect(mockRouter.push).toHaveBeenCalledTimes(0);
   });
 
-  it("should fail on invalid product data", async () => {
-    const priceInput = wrapper.find("input[name=price]");
-    await priceInput.setValue("");
-    const submitButton = wrapper.find("button[type=submit]");
-    await submitButton.trigger("submit");
-    expect(productService.update).toHaveBeenCalledTimes(0);
-    expect(mockRouter.push).toHaveBeenCalledTimes(0);
-  });
-
-  it("should update product on valid form submit", async () => {
+  it("should delete product on valid form submit", async () => {
     expect(productService.get).toHaveBeenCalledTimes(1);
     const submitButton = wrapper.find("button[type=submit]");
     await submitButton.trigger("submit");
-    expect(productService.update).toHaveBeenCalledTimes(1);
+    expect(productService.delete).toHaveBeenCalledTimes(1);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
     expect(mockRouter.push).toHaveBeenCalledWith("/products");
   });

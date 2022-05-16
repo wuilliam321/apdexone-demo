@@ -34,32 +34,36 @@ describe("ProductDeleteButton.vue", () => {
 
   it("should delete on click", () => {
     deleteButton.trigger("click");
-    expect(productService.delete).toHaveBeenCalledTimes(1);
-    expect(productService.delete).toHaveBeenCalledWith(product.code);
-  });
-
-  it("should redirect to delete form on click", (done) => {
-    deleteButton.trigger("click");
-    setTimeout(() => {
-      expect(mockRouter.push).toHaveBeenCalledTimes(1);
-      expect(mockRouter.push).toHaveBeenCalledWith("/products");
-      done();
-    });
-  });
-
-  it("should fail on if error on delete", (done) => {
-    productService.delete = jest.fn(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      (_productId: string): Promise<[Error?, string?]> => {
-        return Promise.resolve([new Error("error"), ""]);
-      }
+    expect(mockRouter.push).toHaveBeenCalledTimes(1);
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      `/products/${product.code}/delete`
     );
-    deleteButton.trigger("click");
-    // TODO: show explicit error of form validations
-    setTimeout(() => {
-      expect(productService.delete).toHaveBeenCalledTimes(1);
-      expect(mockRouter.push).toHaveBeenCalledTimes(0);
-      done();
-    });
+    // expect(productService.delete).toHaveBeenCalledTimes(1);
+    // expect(productService.delete).toHaveBeenCalledWith(product.code);
   });
+
+  // it("should redirect to delete form on click", (done) => {
+  //   deleteButton.trigger("click");
+  //   setTimeout(() => {
+  //     expect(mockRouter.push).toHaveBeenCalledTimes(1);
+  //     expect(mockRouter.push).toHaveBeenCalledWith("/products");
+  //     done();
+  //   });
+  // });
+
+  // it("should fail on if error on delete", (done) => {
+  //   productService.delete = jest.fn(
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //     (_productId: string): Promise<[Error?, string?]> => {
+  //       return Promise.resolve([new Error("error"), ""]);
+  //     }
+  //   );
+  //   deleteButton.trigger("click");
+  //   // TODO: show explicit error of form validations
+  //   setTimeout(() => {
+  //     expect(productService.delete).toHaveBeenCalledTimes(1);
+  //     expect(mockRouter.push).toHaveBeenCalledTimes(0);
+  //     done();
+  //   });
+  // });
 });

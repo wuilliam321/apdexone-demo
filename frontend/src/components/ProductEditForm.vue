@@ -42,14 +42,6 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
     }
   },
   methods: {
-    save() {
-      const [error, isValid] = Validate.saveProduct(this.productForUpdate);
-      if (!isValid) {
-        return [error];
-      }
-      this.productService.update(this.productForUpdate);
-      this.$router.push("/products");
-    },
     async handleSubmit(product: Product) {
       const [error, isValid] = Validate.saveProduct(product);
       if (!isValid) {

@@ -40,6 +40,14 @@ const routes: Array<RouteConfig> = [
         /* webpackChunkName: "product-edit-view" */ "../views/ProductEditView.vue"
       ),
   },
+  {
+    path: "/products/:id/delete",
+    name: "products-delete",
+    component: () =>
+      import(
+        /* webpackChunkName: "product-delete-view" */ "../views/ProductDeleteView.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({
