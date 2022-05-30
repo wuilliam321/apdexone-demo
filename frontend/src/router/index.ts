@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import ProductListView from "../views/ProductListView.vue";
+import InventoryView from "../views/InventoryView.vue";
 
 Vue.use(VueRouter);
 
@@ -25,37 +26,46 @@ const routes: Array<RouteConfig> = [
    **/
   {
     path: "/inventory",
-    redirect: "/inventory/products",
-  },
-  {
-    path: "/inventory/stock",
-    name: "stock.list",
-    component: () => import("../views/StockView.vue"),
-  },
-  {
-    path: "/inventory/stock/report",
-    name: "stock.report",
-    component: () => import("../views/StockReportView.vue"),
-  },
-  {
-    path: "/inventory/products",
-    name: "products.list",
-    component: () => import("../views/ProductListView.vue"),
-  },
-  {
-    path: "/inventory/products/add",
-    name: "products.add",
-    component: () => import("../views/ProductAddView.vue"),
-  },
-  {
-    path: "/inventory/products/:id",
-    name: "products.edit",
-    component: () => import("../views/ProductEditView.vue"),
-  },
-  {
-    path: "/inventory/products/:id/delete",
-    name: "products.delete",
-    component: () => import("../views/ProductDeleteView.vue"),
+    component: InventoryView,
+    name: "inventory",
+    children: [
+      {
+        path: "",
+        components: { inventory: () => import("../views/ProductListView.vue") },
+      },
+      {
+        path: "products",
+        name: "products.list",
+        components: { inventory: () => import("../views/ProductListView.vue") },
+      },
+      {
+        path: "stock",
+        name: "stock.list",
+        components: { inventory: () => import("../views/StockView.vue") },
+      },
+      {
+        path: "stock/report",
+        name: "stock.report",
+        components: { inventory: () => import("../views/StockReportView.vue") },
+      },
+      {
+        path: "products/add",
+        name: "products.add",
+        components: { inventory: () => import("../views/ProductAddView.vue") },
+      },
+      {
+        path: "products/:id",
+        name: "products.edit",
+        components: { inventory: () => import("../views/ProductEditView.vue") },
+      },
+      {
+        path: "products/:id/delete",
+        name: "products.delete",
+        components: {
+          inventory: () => import("../views/ProductDeleteView.vue"),
+        },
+      },
+    ],
   },
 ];
 
