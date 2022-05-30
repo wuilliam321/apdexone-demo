@@ -1,8 +1,8 @@
 import StockService from './stock_service';
-import { Stock } from '../lib/models';
+import { Stock, StockRecord } from '../lib/models';
 import { StockDatasourceMock } from '../helpers/tests';
 import { IStockDatasource, IStockService } from '../lib/interfaces';
-import { ListStockRequest } from '../srv/models';
+import { ListStockRequest, ReportStockRequest } from '../srv/models';
 
 describe("Stock List", () => {
   let ds: IStockDatasource;
@@ -21,15 +21,96 @@ describe("Stock List", () => {
   });
 
   test("list with stocks", () => {
-    const stocks = [new Stock("MM1", "P1", 10),] as Stock[]
-    ds.list = () => [, stocks];
+    const records = [new StockRecord("a_code", "P1", 10)]
+    ds.list = () => [, records];
     const [, response] = stocksService.list(request);
-    expect(response!.stocks).toEqual(stocks);
+    expect(response!.stocks).toEqual(records);
   });
 
   test("given an error in datasource while getting stocks, should return error", () => {
     ds.list = () => [new Error("error"),];
     const [error,] = stocksService.list(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+});
+
+describe("Stock Report", () => {
+  let ds: IStockDatasource;
+  let stocksService: IStockService;
+  let request: ReportStockRequest;
+
+  beforeEach(() => {
+    ds = new StockDatasourceMock();
+    stocksService = new StockService(ds);
+    request = new ReportStockRequest();
+  });
+
+  test("report without records", () => {
+    const [, response] = stocksService.report(request);
+    expect(response!.records).toEqual([] as StockRecord[]);
+  });
+
+  test("report with records, same product addition", () => {
+    const records = [
+      new StockRecord("MM1", "P1", 10),
+      new StockRecord("MM2", "P1", 10),
+    ] as StockRecord[]
+    const expected = [
+      new Stock("P1", 20),
+    ] as Stock[];
+    ds.list = () => [, records];
+    const [, response] = stocksService.report(request);
+    expect(response!.records).toEqual(expected);
+  });
+
+  test("report with records, different product addition", () => {
+    const records = [
+      new StockRecord("MM1", "P1", 10),
+      new StockRecord("MM2", "P1", 10),
+      new StockRecord("MM3", "P2", 10),
+    ] as StockRecord[]
+    const expected = [
+      new Stock("P1", 20),
+      new Stock("P2", 10),
+    ] as Stock[];
+    ds.list = () => [, records];
+    const [, response] = stocksService.report(request);
+    expect(response!.records).toEqual(expected);
+  });
+
+  test("report with records, with a 0 qty product", () => {
+    const records = [
+      new StockRecord("MM1", "P1", 10),
+      new StockRecord("MM2", "P1", 10),
+      new StockRecord("MM3", "P2", 10),
+      new StockRecord("MM4", "P3", 0),
+    ] as StockRecord[]
+    const expected = [
+      new Stock("P1", 20),
+      new Stock("P2", 10),
+      new Stock("P3", 0),
+    ] as Stock[];
+    ds.list = () => [, records];
+    const [, response] = stocksService.report(request);
+    expect(response!.records).toEqual(expected);
+  });
+
+  test("report with records, with substraction", () => {
+    const records = [
+      new StockRecord("MM1", "P1", 10),
+      new StockRecord("MM2", "P1", -10),
+    ] as StockRecord[]
+    const expected = [
+      new Stock("P1", 0),
+    ] as Stock[];
+    ds.list = () => [, records];
+    const [, response] = stocksService.report(request);
+    expect(response!.records).toEqual(expected);
+  });
+
+  test("given an error in datasource while getting records, should return error", () => {
+    ds.list = () => [new Error("error"),];
+    const [error,] = stocksService.report(request);
     expect(error).toBeInstanceOf(Error);
   });
 });

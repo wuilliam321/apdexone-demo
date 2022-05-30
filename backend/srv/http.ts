@@ -127,6 +127,18 @@ class HttpServer {
       res.status(201).send(result!.stocks);
     }
   }
+
+  handleReportStock(): (req: Request, res: Response) => void {
+    return (_req: Request, res: Response) => {
+      const body = new ListStockRequest();
+      const [error, result] = this.stocksService!.report(body);
+      if (error) {
+        res.status(500).send({ message: error.message });
+        return;
+      }
+      res.status(201).send(result!.records);
+    }
+  }
 }
 
 export default HttpServer;

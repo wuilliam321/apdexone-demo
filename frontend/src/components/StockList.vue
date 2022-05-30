@@ -11,10 +11,10 @@
           </tr>
         </thead>
         <tbody class="stock-item">
-          <template v-for="stock in stocks">
+          <template v-for="record in records">
             <StockListItem
-              :key="stock.product_code"
-              :stock="stock"
+              :key="record.code + record.product_code"
+              :record="record"
             ></StockListItem>
           </template>
         </tbody>
@@ -26,7 +26,7 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import StockListItem from "@/components/StockListItem.vue";
-import { Stock } from "@/lib/models";
+import { StockRecord } from "@/lib/models";
 
 export default Vue.extend({
   name: "StockList",
@@ -34,8 +34,8 @@ export default Vue.extend({
     StockListItem,
   },
   props: {
-    stocks: {
-      type: Array as PropType<Stock[]>,
+    records: {
+      type: Array as PropType<StockRecord[]>,
       required: true,
     },
   },

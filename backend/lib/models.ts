@@ -11,6 +11,17 @@ export class Product {
 }
 
 export class Stock {
+  constructor(public product_code: string, public quantity: number) { }
+
+  toJSON(): Object {
+    return {
+      product_code: this.product_code,
+      quantity: this.quantity,
+    };
+  }
+}
+
+export class StockRecord {
   constructor(public code: string, public product_code: string, public quantity: number) { }
 
   toJSON(): Object {

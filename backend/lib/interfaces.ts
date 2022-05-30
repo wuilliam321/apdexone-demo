@@ -1,4 +1,4 @@
-import { Product, Stock } from "./models";
+import { Product, StockRecord } from "./models";
 import {
   CreateProductRequest,
   CreateProductResponse,
@@ -10,6 +10,8 @@ import {
   ListProductResponse,
   ListStockRequest,
   ListStockResponse,
+  ReportStockRequest,
+  ReportStockResponse,
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../srv/models";
@@ -32,9 +34,10 @@ export interface IProductsService {
 
 
 export interface IStockDatasource {
-  list(): [Error?, Stock[]?];
+  list(): [Error?, StockRecord[]?];
 }
 
 export interface IStockService {
   list(req: ListStockRequest): [Error?, ListStockResponse?];
+  report(req: ReportStockRequest): [Error?, ReportStockResponse?];
 }

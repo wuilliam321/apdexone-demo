@@ -3,8 +3,9 @@ import {
   IStockService,
   ListProductResponse,
   ListStockResponse,
+  ReportStockResponse,
 } from "@/lib/interfaces";
-import { Product, Stock } from "@/lib/models";
+import { Product, Stock, StockRecord } from "@/lib/models";
 
 export const newMockRoute = () => ({
   params: {
@@ -38,8 +39,14 @@ export const newProductServiceMock = (
   }),
 });
 
-export const newStockServiceMock = (stocks: Stock[]): IStockService => ({
+export const newStockServiceMock = (
+  records: StockRecord[],
+  stocks: Stock[]
+): IStockService => ({
   list: jest.fn((): Promise<[Error?, ListStockResponse?]> => {
-    return Promise.resolve([undefined, { stocks: stocks }]);
+    return Promise.resolve([undefined, { records }]);
+  }),
+  report: jest.fn((): Promise<[Error?, ReportStockResponse?]> => {
+    return Promise.resolve([undefined, { stocks }]);
   }),
 });

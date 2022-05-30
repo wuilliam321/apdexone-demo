@@ -1,4 +1,4 @@
-import { Product, Stock } from "./models";
+import { Product, Stock, StockRecord } from "./models";
 
 // TODO: vue related
 export interface ServiceInjection {
@@ -31,9 +31,16 @@ export interface IProductService {
 export class ListStockParams {}
 
 export class ListStockResponse {
+  constructor(public records: StockRecord[]) {}
+}
+
+export class ReportStockParams {}
+
+export class ReportStockResponse {
   constructor(public stocks: Stock[]) {}
 }
 
 export interface IStockService {
   list(params?: ListStockParams): Promise<[Error?, ListStockResponse?]>;
+  report(params?: ReportStockParams): Promise<[Error?, ReportStockResponse?]>;
 }

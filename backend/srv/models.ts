@@ -1,4 +1,4 @@
-import { Product, Stock } from "../lib/models";
+import { Product, Stock, StockRecord } from "../lib/models";
 
 export class CreateProductResponse {
   constructor(private _code: string) { }
@@ -95,5 +95,40 @@ export class ListStockResponse {
 
   get stocks(): Stock[] {
     return this._stocks;
+  }
+}
+
+type ProductQuantities = {
+    [key: string]: number[];
+}
+
+export class ReportStockRequest { }
+export class ReportStockResponse {
+  private _stock: Stock[];
+
+  constructor(private _records: StockRecord[]) {
+    this._stock = [] as Stock[];
+  }
+
+  toJSON(): Object {
+    return {
+      stock: this._stock,
+    };
+  }
+
+  get records(): Stock[] {
+    let quantities: ProductQuantities = {};
+    if (this._records.length > 0) {
+      this._records.forEach(record => {
+        if (!quantities[record.product_code]) {
+          quantities[record.product_code] = [] as number[];
+        }
+        quantities[record.product_code].push(record.quantity);
+      });
+      Object.entries(quantities).forEach(([productCode, quantities]) => {
+        this._stock.push(new Stock(productCode, quantities.reduce((a, b) => a + b, 0)));
+      });
+    }
+    return this._stock;
   }
 }

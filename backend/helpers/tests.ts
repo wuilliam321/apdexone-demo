@@ -1,4 +1,4 @@
-import { Product, Stock } from "../lib/models";
+import { Product, StockRecord } from "../lib/models";
 import { IProductsDatasource, IStockDatasource } from "../lib/interfaces";
 
 export class ProductDatasourceMock implements IProductsDatasource {
@@ -28,7 +28,7 @@ export class ProductDatasourceMock implements IProductsDatasource {
 export class StockDatasourceMock implements IStockDatasource {
   constructor() {}
 
-  list(): [Error?, Stock[]?] {
-    return [, [] as Stock[]];
+  list(): [Error?, StockRecord[]?] {
+    return [, [] as StockRecord[]];
   }
 }

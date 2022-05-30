@@ -1,8 +1,8 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import HttpServer from './http';
-import { CreateProductRequest, CreateProductResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, ListStockRequest, ListStockResponse, UpdateProductRequest, UpdateProductResponse } from './models';
+import { CreateProductRequest, CreateProductResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, ListStockRequest, ListStockResponse, ReportStockRequest, ReportStockResponse, UpdateProductRequest, UpdateProductResponse } from './models';
 import { ProductDatasourceMock, StockDatasourceMock } from '../helpers/tests';
-import { Product, Stock } from '../lib/models';
+import { Product, Stock, StockRecord } from '../lib/models';
 import ProductsService from '../lib/products_service';
 import StockService from '../lib/stock_service';
 import { IProductsService, IStockService } from '../lib/interfaces';
@@ -371,7 +371,6 @@ describe('StocksHttp List', () => {
 
   test('given a stock, should return a list of stocks', () => {
     const stocks = [{
-      code: '125',
       product_code: 'P1',
       quantity: 10,
     },] as Stock[];
@@ -400,4 +399,62 @@ describe('StocksHttp List', () => {
 
 
   // TODO: update stock test
+});
+
+describe('StocksHttp Report', () => {
+  let server: HttpServer;
+  let service: IStockService;
+  let handler: (req: any, res: any) => void;
+
+  beforeEach(() => {
+    service = new StockService(new StockDatasourceMock());
+    server = new HttpServer(undefined, service);
+    handler = server.handleReportStock();
+  });
+
+  test('given that there are no records, should return an empty list of records', () => {
+    service.report = (_req: ReportStockRequest): [Error?, ReportStockResponse?] => {
+      return [, new ReportStockResponse([] as StockRecord[])];
+    };
+    const req = getMockReq();
+    const records = [] as StockRecord[];
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledWith(records);
+  });
+
+  test('given a record, should return a list of records', () => {
+    const records = [{
+      code: 'a_code',
+      product_code: 'P1',
+      quantity: 10,
+    },] as StockRecord[];
+    service.report = (_req: ReportStockRequest): [Error?, ReportStockResponse?] => {
+      return [, new ReportStockResponse(records)];
+    };
+    server = new HttpServer(undefined, service);
+    handler = server.handleReportStock();
+    const req = getMockReq();
+    const { res } = getMockRes();
+    handler(req, res);
+
+    const expected = [
+      new Stock("P1", 10),
+    ] as Stock[];
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledWith(expected);
+  });
+
+  test('given an internal error, should return 500 error', () => {
+    service.report = (_req: ReportStockRequest): [Error?, ReportStockResponse?] => {
+      return [new Error('test'),];
+    };
+    handler = server.handleReportStock();
+    const req = getMockReq();
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.send).toHaveBeenCalledWith({message: "test"});
+  });
 });

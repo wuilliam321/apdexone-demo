@@ -21,11 +21,18 @@ function routes(app: Express, server: HttpServer) {
    *             type: string
    *           price:
    *             type: number
-   *       Stock:
+   *       StockRecord:
    *         type: object
    *         properties:
    *           code:
    *             type: string
+   *           product_code:
+   *             type: string
+   *           quantity:
+   *             type: number
+   *       Stock:
+   *         type: object
+   *         properties:
    *           product_code:
    *             type: string
    *           quantity:
@@ -231,7 +238,30 @@ function routes(app: Express, server: HttpServer) {
    * @openapi
    * /stock:
    *   get:
-   *     summary: List the stock
+   *     summary: Full record of the stock
+   *     responses:
+   *       201:
+   *         description: successful operation
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/StockRecord'
+   *       500:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   */
+  app.get('/stock', server.handleListStock());
+
+
+  /**
+   * @openapi
+   * /stock/report:
+   *   get:
+   *     summary: Report of the stock
    *     responses:
    *       201:
    *         description: successful operation
@@ -247,7 +277,7 @@ function routes(app: Express, server: HttpServer) {
    *             schema:
    *               $ref: '#/components/schemas/Error'
    */
-  app.get('/stock', server.handleListStock());
+  app.get('/stock/report', server.handleReportStock());
 
   const options = {
     definition: {

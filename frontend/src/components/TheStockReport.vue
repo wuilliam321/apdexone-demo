@@ -2,47 +2,47 @@
   <div>
     <TheToolbar />
     <TheErrorMessage v-if="error" :error="error" />
-    <StockList :records="records" />
+    <StockReportList :stocks="stocks" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from "vue";
-import StockList from "./StockList.vue";
+import StockReportList from "@/components/StockReportList.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
-import { ListStockParams, ServiceInjection } from "@/lib/interfaces";
-import { StockRecord } from "@/lib/models";
-import TheToolbar from "./TheToolbar.vue";
+import TheToolbar from "@/components/TheToolbar.vue";
+import { ReportStockParams, ServiceInjection } from "@/lib/interfaces";
+import { Stock } from "@/lib/models";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
-  name: "TheStock",
+  name: "TheStockReport",
   components: {
-    StockList,
+    StockReportList,
     TheToolbar,
     TheErrorMessage,
   },
   inject: ["stockService"],
   data() {
     return {
-      records: [] as StockRecord[],
+      stocks: [] as Stock[],
       error: undefined as Error | undefined,
     };
   },
   mounted() {
-    this.fetchStockRecords();
+    this.fetchStocks();
   },
   methods: {
-    async fetchStockRecords() {
-      const params = new ListStockParams();
+    async fetchStocks() {
+      const params = new ReportStockParams();
       if (!this.stockService) {
         return;
       }
-      const [error, response] = await this.stockService.list(params);
+      const [error, response] = await this.stockService.report(params);
       if (error) {
         this.error = error;
       }
-      if (response?.records) {
-        this.records = response.records;
+      if (response?.stocks) {
+        this.stocks = response.stocks;
       }
     },
   },

@@ -4,7 +4,8 @@
       <div class="col">
         <nav>
           <router-link to="/inventory/products">Products</router-link> |
-          <router-link to="/inventory/stock">Stock</router-link> |
+          <router-link to="/inventory/stock">Transactions</router-link> |
+          <router-link to="/inventory/stock/report">Stock Report</router-link> |
           <router-link to="/about">About</router-link>
         </nav>
       </div>

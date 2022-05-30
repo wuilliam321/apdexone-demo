@@ -29,8 +29,13 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/inventory/stock",
-    name: "stock.report",
+    name: "stock.list",
     component: () => import("../views/StockView.vue"),
+  },
+  {
+    path: "/inventory/stock/report",
+    name: "stock.report",
+    component: () => import("../views/StockReportView.vue"),
   },
   {
     path: "/inventory/products",

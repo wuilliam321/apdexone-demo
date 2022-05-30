@@ -9,17 +9,17 @@ import {
   // ListStockResponse,
   ServiceInjection,
 } from "@/lib/interfaces";
-import { Stock } from "@/lib/models";
+import { StockRecord } from "@/lib/models";
 import { newStockServiceMock } from "./helpers";
 
 describe("TheStock.vue", () => {
-  let stocks: Stock[];
+  let records: StockRecord[];
   let stockService: IStockService;
   let wrapper: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    stocks = [new Stock("1234", "P1", 10)];
-    stockService = newStockServiceMock(stocks);
+    records = [new StockRecord("1234", "P1", 10)];
+    stockService = newStockServiceMock(records, []);
     wrapper = mount(TheStock, {
       provide(): ServiceInjection {
         return { stockService };
@@ -36,7 +36,7 @@ describe("TheStock.vue", () => {
   it("should fetch stocks and send them to the stock list", (done) => {
     expect(stockService.list).toHaveBeenCalledTimes(1);
     setTimeout(() => {
-      expect(wrapper.findComponent(StockList).props().stocks).toEqual(stocks);
+      expect(wrapper.findComponent(StockList).props().records).toEqual(records);
       done();
     });
   });

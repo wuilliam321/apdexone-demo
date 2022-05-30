@@ -1,22 +1,22 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import StockListItem from "@/components/StockListItem.vue";
-import { Stock } from "@/lib/models";
+import { StockRecord } from "@/lib/models";
 import { IStockService, ServiceInjection } from "@/lib/interfaces";
 import { newStockServiceMock } from "./helpers";
 
 describe("StockListItem.vue", () => {
-  let stocks: Stock[];
+  let records: StockRecord[];
   let stockService: IStockService;
   let wrapper: Wrapper<Vue, Element>;
   // let editButton: Wrapper<Vue, Element>;
   // let deleteButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    const stock = new Stock("1234", "P1", 10);
-    stocks = [stock];
-    stockService = newStockServiceMock(stocks);
+    const record = new StockRecord("1234", "P1", 10);
+    records = [record];
+    stockService = newStockServiceMock(records, []);
     wrapper = mount(StockListItem, {
-      propsData: { stock },
+      propsData: { record },
       provide(): ServiceInjection {
         return { stockService };
       },
