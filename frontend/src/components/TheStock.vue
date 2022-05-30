@@ -2,45 +2,44 @@
   <div>
     <TheToolbar />
     <TheErrorMessage v-if="error" :error="error" />
-    <ProductList :products="products" />
+    <StockList :stocks="stocks" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from "vue";
-import ProductList from "@/components/ProductList.vue";
+import StockList from "./StockList.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
-import { ListProductParams, ServiceInjection } from "@/lib/interfaces";
-import { Product } from "@/lib/models";
+import { ListStockParams, ServiceInjection } from "@/lib/interfaces";
+import { Stock } from "@/lib/models";
 import TheToolbar from "./TheToolbar.vue";
 
 export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
-  name: "TheCatalog",
+  name: "TheStock",
   components: {
-    ProductList,
+    StockList,
     TheToolbar,
     TheErrorMessage,
   },
-  inject: ["productService"],
+  inject: ["stockService"],
   data() {
     return {
-      products: [] as Product[],
+      stocks: [] as Stock[],
       error: undefined as Error | undefined,
     };
   },
   mounted() {
-    this.fetchProducts();
+    this.fetchStocks();
   },
   methods: {
-    async fetchProducts() {
-      const params = new ListProductParams();
-      // TODO: refresh on delete??
-      const [error, response] = await this.productService!.list(params);
+    async fetchStocks() {
+      const params = new ListStockParams();
+      const [error, response] = await this.stockService!.list(params);
       if (error) {
         this.error = error;
       }
-      if (response?.products) {
-        this.products = response.products;
+      if (response?.stocks) {
+        this.stocks = response.stocks;
       }
     },
   },

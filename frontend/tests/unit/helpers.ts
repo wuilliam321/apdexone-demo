@@ -1,5 +1,10 @@
-import { IProductService, ListProductResponse } from "@/lib/interfaces";
-import { Product } from "@/lib/models";
+import {
+  IProductService,
+  IStockService,
+  ListProductResponse,
+  ListStockResponse,
+} from "@/lib/interfaces";
+import { Product, Stock } from "@/lib/models";
 
 export const newMockRoute = () => ({
   params: {
@@ -30,5 +35,11 @@ export const newProductServiceMock = (
   }),
   delete: jest.fn((productId: string): Promise<[Error?, string?]> => {
     return Promise.resolve([undefined, productId]);
+  }),
+});
+
+export const newStockServiceMock = (stocks: Stock[]): IStockService => ({
+  list: jest.fn((): Promise<[Error?, ListStockResponse?]> => {
+    return Promise.resolve([undefined, { stocks: stocks }]);
   }),
 });

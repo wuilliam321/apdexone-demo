@@ -74,7 +74,7 @@ describe("ProductEditForm.vue", () => {
     await submitButton.trigger("submit");
     expect(productService.update).toHaveBeenCalledTimes(1);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products");
   });
 
   it("should return to list if cancel is pressed", async () => {
@@ -82,6 +82,6 @@ describe("ProductEditForm.vue", () => {
     await cancelButton.trigger("click");
     expect(productService.delete).toHaveBeenCalledTimes(0);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products");
   });
 });

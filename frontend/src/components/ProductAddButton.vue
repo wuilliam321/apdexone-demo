@@ -18,7 +18,7 @@ export default Vue.extend({
   name: "ProductAddButton",
   methods: {
     goToProductAdd() {
-      this.$router.push("/products/add");
+      this.$router.push("/inventory/products/add");
     },
   },
 });

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { IProductsService } from '../lib/interfaces';
-import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from './models';
+import { IProductsService, IStockService } from '../lib/interfaces';
+import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, ListStockRequest, UpdateProductRequest } from './models';
 
 class HttpServer {
-  constructor(private productsService: IProductsService) { }
+  constructor(private productsService: IProductsService | undefined, private stocksService: IStockService | undefined) { }
 
   handleCreateProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
@@ -29,7 +29,7 @@ class HttpServer {
 
       const body = new CreateProductRequest(req.body.code, req.body.name, req.body.price);
 
-      const [error, result] = this.productsService.create(body);
+      const [error, result] = this.productsService!.create(body);
       if (error) {
         res.status(500).send({ message: error.message });
         return;
@@ -42,7 +42,7 @@ class HttpServer {
   handleListProducts(): (req: Request, res: Response) => void {
     return (_req: Request, res: Response) => {
       const body = new ListProductRequest();
-      const [error, result] = this.productsService.list(body);
+      const [error, result] = this.productsService!.list(body);
       if (error) {
         res.status(500).send({ message: error.message });
         return;
@@ -54,7 +54,7 @@ class HttpServer {
   handleGetProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
       const body = new GetProductRequest(req.params.id);
-      const [error, result] = this.productsService.get(body);
+      const [error, result] = this.productsService!.get(body);
       if (error) {
         res.status(500).send({ message: error.message });
         return;
@@ -87,7 +87,7 @@ class HttpServer {
 
       const body = new UpdateProductRequest(req.body.code, req.body.name, req.body.price);
 
-      const [error, result] = this.productsService.update(body);
+      const [error, result] = this.productsService!.update(body);
       if (error) {
         res.status(500).send({ message: error.message });
         return;
@@ -106,13 +106,25 @@ class HttpServer {
 
       const body = new DeleteProductRequest(req.params.id);
 
-      const [error, result] = this.productsService.delete(body);
+      const [error, result] = this.productsService!.delete(body);
       if (error) {
         res.status(500).send({ message: error.message });
         return;
       }
 
       res.status(201).send(result);
+    }
+  }
+
+  handleListStock(): (req: Request, res: Response) => void {
+    return (_req: Request, res: Response) => {
+      const body = new ListStockRequest();
+      const [error, result] = this.stocksService!.list(body);
+      if (error) {
+        res.status(500).send({ message: error.message });
+        return;
+      }
+      res.status(201).send(result!.stocks);
     }
   }
 }

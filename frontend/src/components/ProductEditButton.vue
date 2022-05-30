@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   methods: {
     goToProductEdit() {
-      this.$router.push(`/products/${this.productId}`);
+      this.$router.push(`/inventory/products/${this.productId}`);
     },
   },
 });

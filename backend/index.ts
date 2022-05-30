@@ -4,15 +4,22 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import HttpServer from './srv/http';
 import ProductsService from './lib/products_service';
-import LokiDatasource from './infra/loki_datasource';
+import StockService from './lib/stock_service';
+import ProductsDatasource from './infra/products_datasource';
+import StockDatasource from './infra/stock_datasource';
 import routes from './routes';
 
 dotenv.config();
 
 const db = new Loki('inventoryDB');
-const ds = new LokiDatasource(db);
-const service = new ProductsService(ds);
-const server = new HttpServer(service);
+
+const productsDs = new ProductsDatasource(db);
+const productsService = new ProductsService(productsDs);
+
+const stocksDS = new StockDatasource(db);
+const stockService = new StockService(stocksDS);
+
+const server = new HttpServer(productsService, stockService);
 
 const app: Express = express();
 app.use(express.json())

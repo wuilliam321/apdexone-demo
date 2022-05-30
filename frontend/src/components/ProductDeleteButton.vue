@@ -36,7 +36,7 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
     /*   } */
     /* }, */
     goToDeleteConfirmation() {
-      this.$router.push(`/products/${this.productId}/delete`);
+      this.$router.push(`/inventory/products/${this.productId}/delete`);
     },
   },
 });

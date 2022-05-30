@@ -1,6 +1,6 @@
 import ProductsService from './products_service';
 import { Product } from '../lib/models';
-import { DatasourceMock } from '../helpers/tests';
+import { ProductDatasourceMock } from '../helpers/tests';
 import { IProductsDatasource, IProductsService } from '../lib/interfaces';
 import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, UpdateProductRequest } from '../srv/models';
 
@@ -10,7 +10,7 @@ describe("Products Create", () => {
   let request: CreateProductRequest;
 
   beforeEach(() => {
-    dsMock = new DatasourceMock();
+    dsMock = new ProductDatasourceMock();
     productsService = new ProductsService(dsMock);
     request = new CreateProductRequest("a_code", "iPhone", 1000)
   });
@@ -52,7 +52,7 @@ describe("Products List", () => {
   let request: ListProductRequest;
 
   beforeEach(() => {
-    ds = new DatasourceMock();
+    ds = new ProductDatasourceMock();
     productsService = new ProductsService(ds);
     request = new ListProductRequest();
   });
@@ -82,7 +82,7 @@ describe("Products Get", () => {
   let request: GetProductRequest;
 
   beforeEach(() => {
-    ds = new DatasourceMock();
+    ds = new ProductDatasourceMock();
     productsService = new ProductsService(ds);
     request = new GetProductRequest("a_code");
   });
@@ -112,7 +112,7 @@ describe("Products Update", () => {
   let request: UpdateProductRequest;
 
   beforeEach(() => {
-    dsMock = new DatasourceMock();
+    dsMock = new ProductDatasourceMock();
     productsService = new ProductsService(dsMock);
     request = new UpdateProductRequest("a_code", "iPhone", 1000)
   });
@@ -154,7 +154,7 @@ describe("Products Delete", () => {
   let request: DeleteProductRequest;
 
   beforeEach(() => {
-    dsMock = new DatasourceMock();
+    dsMock = new ProductDatasourceMock();
     productsService = new ProductsService(dsMock);
     request = new DeleteProductRequest("a_code")
   });

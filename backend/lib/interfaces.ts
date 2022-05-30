@@ -1,4 +1,4 @@
-import { Product } from "./models";
+import { Product, Stock } from "./models";
 import {
   CreateProductRequest,
   CreateProductResponse,
@@ -8,6 +8,8 @@ import {
   GetProductResponse,
   ListProductRequest,
   ListProductResponse,
+  ListStockRequest,
+  ListStockResponse,
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../srv/models";
@@ -26,4 +28,13 @@ export interface IProductsService {
   get(req: GetProductRequest): [Error?, GetProductResponse?];
   update(req: UpdateProductRequest): [Error?, UpdateProductResponse?];
   delete(req: DeleteProductRequest): [Error?, DeleteProductResponse?];
+}
+
+
+export interface IStockDatasource {
+  list(): [Error?, Stock[]?];
+}
+
+export interface IStockService {
+  list(req: ListStockRequest): [Error?, ListStockResponse?];
 }

@@ -36,7 +36,7 @@ describe("ProductDeleteButton.vue", () => {
     deleteButton.trigger("click");
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
     expect(mockRouter.push).toHaveBeenCalledWith(
-      `/products/${product.code}/delete`
+      `/inventory/products/${product.code}/delete`
     );
     // expect(productService.delete).toHaveBeenCalledTimes(1);
     // expect(productService.delete).toHaveBeenCalledWith(product.code);
@@ -46,7 +46,7 @@ describe("ProductDeleteButton.vue", () => {
   //   deleteButton.trigger("click");
   //   setTimeout(() => {
   //     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-  //     expect(mockRouter.push).toHaveBeenCalledWith("/products");
+  //     expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products");
   //     done();
   //   });
   // });

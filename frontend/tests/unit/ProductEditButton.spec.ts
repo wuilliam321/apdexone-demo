@@ -26,6 +26,6 @@ describe("ProductEditButton.vue", () => {
   it("should redirect to edit form on click", () => {
     editButton.trigger("click");
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products/1");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products/1");
   });
 });

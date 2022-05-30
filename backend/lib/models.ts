@@ -9,3 +9,15 @@ export class Product {
     };
   }
 }
+
+export class Stock {
+  constructor(public code: string, public product_code: string, public quantity: number) { }
+
+  toJSON(): Object {
+    return {
+      code: this.code,
+      product_code: this.product_code,
+      quantity: this.quantity,
+    };
+  }
+}

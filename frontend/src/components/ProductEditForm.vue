@@ -32,7 +32,7 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
     };
   },
   async created() {
-    const [error, product] = await this.productService.get(this.productId);
+    const [error, product] = await this.productService!.get(this.productId);
     if (error) {
       // TODO: show a message
       return;
@@ -47,11 +47,11 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
       if (!isValid) {
         return [error];
       }
-      await this.productService.update(product);
-      this.$router.push("/products");
+      await this.productService!.update(product);
+      this.$router.push("/inventory/products");
     },
     handleCancel() {
-      this.$router.push("/products");
+      this.$router.push("/inventory/products");
     },
   },
 });

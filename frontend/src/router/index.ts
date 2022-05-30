@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import ProductListView from "../views/ProductListView.vue";
 
 Vue.use(VueRouter);
 
@@ -8,12 +8,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/products",
-    name: "products",
-    component: HomeView,
+    component: ProductListView,
   },
   {
     path: "/about",
@@ -24,33 +19,43 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+
+  /**
+   * Inventory::products
+   **/
   {
-    path: "/products/add",
-    name: "products-add",
-    component: () =>
-      import(
-        /* webpackChunkName: "product-add-view" */ "../views/ProductAddView.vue"
-      ),
+    path: "/inventory",
+    redirect: "/inventory/products",
   },
   {
-    path: "/products/:id",
-    name: "products-edit",
-    component: () =>
-      import(
-        /* webpackChunkName: "product-edit-view" */ "../views/ProductEditView.vue"
-      ),
+    path: "/inventory/stock",
+    name: "stock.report",
+    component: () => import("../views/StockView.vue"),
   },
   {
-    path: "/products/:id/delete",
-    name: "products-delete",
-    component: () =>
-      import(
-        /* webpackChunkName: "product-delete-view" */ "../views/ProductDeleteView.vue"
-      ),
+    path: "/inventory/products",
+    name: "products.list",
+    component: () => import("../views/ProductListView.vue"),
+  },
+  {
+    path: "/inventory/products/add",
+    name: "products.add",
+    component: () => import("../views/ProductAddView.vue"),
+  },
+  {
+    path: "/inventory/products/:id",
+    name: "products.edit",
+    component: () => import("../views/ProductEditView.vue"),
+  },
+  {
+    path: "/inventory/products/:id/delete",
+    name: "products.delete",
+    component: () => import("../views/ProductDeleteView.vue"),
   },
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes,
 });
 

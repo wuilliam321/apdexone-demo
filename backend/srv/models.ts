@@ -1,4 +1,4 @@
-import { Product } from "../lib/models";
+import { Product, Stock } from "../lib/models";
 
 export class CreateProductResponse {
   constructor(private _code: string) { }
@@ -80,4 +80,20 @@ export class DeleteProductRequest {
 
 export class DeleteProductResponse {
   constructor(public code: string) { }
+}
+
+
+export class ListStockRequest { }
+export class ListStockResponse {
+  constructor(private _stocks: Stock[]) { }
+
+  toJSON(): Object {
+    return {
+      stocks: this._stocks,
+    };
+  }
+
+  get stocks(): Stock[] {
+    return this._stocks;
+  }
 }

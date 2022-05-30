@@ -1,7 +1,7 @@
-import { Product } from "../lib/models";
-import { IProductsDatasource } from "../lib/interfaces";
+import { Product, Stock } from "../lib/models";
+import { IProductsDatasource, IStockDatasource } from "../lib/interfaces";
 
-export class DatasourceMock implements IProductsDatasource {
+export class ProductDatasourceMock implements IProductsDatasource {
   constructor() {}
 
   add(product: Product): [Error?, Product?] {
@@ -22,5 +22,13 @@ export class DatasourceMock implements IProductsDatasource {
 
   delete(code: string): [Error?, string?] {
     return [, code];
+  }
+}
+
+export class StockDatasourceMock implements IStockDatasource {
+  constructor() {}
+
+  list(): [Error?, Stock[]?] {
+    return [, [] as Stock[]];
   }
 }

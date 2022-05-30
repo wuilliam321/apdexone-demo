@@ -61,7 +61,7 @@ describe("ProductDeleteForm.vue", () => {
     await submitButton.trigger("submit");
     expect(productService.delete).toHaveBeenCalledTimes(1);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products");
   });
 
   it("should return to list if cancel is pressed", async () => {
@@ -69,6 +69,6 @@ describe("ProductDeleteForm.vue", () => {
     await cancelButton.trigger("click");
     expect(productService.delete).toHaveBeenCalledTimes(0);
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products");
   });
 });

@@ -3,7 +3,8 @@
     <div class="row">
       <div class="col">
         <nav>
-          <router-link to="/">Home</router-link> |
+          <router-link to="/inventory/products">Products</router-link> |
+          <router-link to="/inventory/stock">Stock</router-link> |
           <router-link to="/about">About</router-link>
         </nav>
       </div>

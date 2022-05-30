@@ -5,6 +5,10 @@ import HttpServer from './srv/http';
 
 function routes(app: Express, server: HttpServer) {
   /**
+   * Products
+   */
+
+  /**
    * @openapi
    *   components:
    *     schemas:
@@ -16,6 +20,15 @@ function routes(app: Express, server: HttpServer) {
    *           name:
    *             type: string
    *           price:
+   *             type: number
+   *       Stock:
+   *         type: object
+   *         properties:
+   *           code:
+   *             type: string
+   *           product_code:
+   *             type: string
+   *           quantity:
    *             type: number
    *       Error:
    *         type: object
@@ -208,6 +221,33 @@ function routes(app: Express, server: HttpServer) {
    *               $ref: '#/components/schemas/Error'
    */
   app.delete('/products/:id', server.handleDeleteProduct());
+
+  /**
+    * Inventory
+    */
+
+
+  /**
+   * @openapi
+   * /stock:
+   *   get:
+   *     summary: List the stock
+   *     responses:
+   *       201:
+   *         description: successful operation
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Stock'
+   *       500:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   */
+  app.get('/stock', server.handleListStock());
 
   const options = {
     definition: {

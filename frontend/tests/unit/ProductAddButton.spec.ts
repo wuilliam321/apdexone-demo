@@ -23,6 +23,6 @@ describe("ProductAddButton.vue", () => {
   it("should redirect to add form on click", () => {
     addButton.trigger("click");
     expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith("/products/add");
+    expect(mockRouter.push).toHaveBeenCalledWith("/inventory/products/add");
   });
 });

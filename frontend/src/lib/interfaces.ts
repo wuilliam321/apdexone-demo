@@ -1,8 +1,9 @@
-import { Product } from "./models";
+import { Product, Stock } from "./models";
 
 // TODO: vue related
 export interface ServiceInjection {
-  productService: IProductService;
+  productService?: IProductService;
+  stockService?: IStockService;
 }
 
 export class CreateProductRequest {
@@ -25,4 +26,14 @@ export interface IProductService {
   update(product: Product): Promise<[Error?, string?]>;
   get(productId: string): Promise<[Error?, Product?]>;
   delete(productId: string): Promise<[Error?, string?]>;
+}
+
+export class ListStockParams {}
+
+export class ListStockResponse {
+  constructor(public stocks: Stock[]) {}
+}
+
+export interface IStockService {
+  list(params?: ListStockParams): Promise<[Error?, ListStockResponse?]>;
 }
