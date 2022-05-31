@@ -9,6 +9,12 @@
     <td class="stock-item__quantity">
       {{ record.quantity }}
     </td>
+    <td class="stock-item__category">
+      {{ record.category }}
+    </td>
+    <td class="stock-item__size">
+      {{ record.size }}
+    </td>
     <td class="stock-item__actions">
       <div class="btn-group" role="group" aria-label="Actions">
         edit/delete?

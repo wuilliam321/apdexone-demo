@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IProductsService, IStockService } from '../lib/interfaces';
-import { CreateProductRequest, CreateStockRecordRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, ListStockRequest, UpdateProductRequest } from './models';
+import { CreateProductRequest, CreateStockRecordRequest, DeleteProductRequest, GetProductRequest, GroupByReportStock, ListProductRequest, ListStockRequest, ReportStockRequest, UpdateProductRequest } from './models';
 
 class HttpServer {
   constructor(private productsService: IProductsService | undefined, private stocksService: IStockService | undefined) { }
@@ -146,6 +146,19 @@ class HttpServer {
         return;
       }
 
+      // TODO: not tested
+      if (!req.body.category) {
+      //   res.status(400).send({ message: 'category is required' });
+      //   return;
+          req.body.category = 'none';
+      }
+
+      // TODO: not tested
+      if (!req.body.size) {
+      //   res.status(400).send({ message: 'size is required' });
+      //   return;
+          req.body.size = 'none';
+      }
 
       let quantity = Number.parseInt(req.body.quantity);
       if (Number.isNaN(quantity) || quantity === 0) {
@@ -153,7 +166,7 @@ class HttpServer {
         return;
       }
 
-      const body = new CreateStockRecordRequest(req.body.code, req.body.product_code, Number.parseInt(req.body.quantity));
+      const body = new CreateStockRecordRequest(req.body.code, req.body.product_code, Number.parseInt(req.body.quantity, ), req.body.category, req.body.size);
       const [error, result] = this.stocksService!.create(body);
       if (error) {
         res.status(500).send({ message: error.message });
@@ -164,8 +177,8 @@ class HttpServer {
   }
 
   handleReportStock(): (req: Request, res: Response) => void {
-    return (_req: Request, res: Response) => {
-      const body = new ListStockRequest();
+    return (req: Request, res: Response) => {
+      const body = new ReportStockRequest(req.query.groupBy as GroupByReportStock);
       const [error, result] = this.stocksService!.report(body);
       if (error) {
         res.status(500).send({ message: error.message });

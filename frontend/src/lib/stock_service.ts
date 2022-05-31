@@ -29,11 +29,14 @@ export class StockService implements IStockService {
   }
 
   async report(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _params?: ReportStockParams
+    params?: ReportStockParams
   ): Promise<[Error?, ReportStockResponse?]> {
+    let url = "/stock/report";
+    if (params && params.groupBy) {
+      url += `?groupBy=${params.groupBy}`;
+    }
     const [err, res] = await this.http.get<Stock[], HttpResponse<Stock[]>>(
-      "/stock/report",
+      url,
       undefined
     );
     if (err) {
@@ -59,6 +62,8 @@ export class StockService implements IStockService {
       code: stockRecord.code,
       product_code: stockRecord.product_code,
       quantity: stockRecord.quantity,
+      category: stockRecord.category,
+      size: stockRecord.size,
     });
     if (err) {
       return [err];

@@ -6,10 +6,17 @@ export class StockRecord {
   constructor(
     public code: string,
     public product_code: string,
-    public quantity: number
+    public quantity: number,
+    public category: string,
+    public size: string
   ) {}
 }
 
 export class Stock {
-  constructor(public product_code: string, public quantity: number) {}
+  constructor(
+    public product_code: string,
+    public quantity: number,
+    public category: string,
+    public size: string
+  ) {}
 }

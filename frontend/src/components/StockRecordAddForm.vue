@@ -24,7 +24,7 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   },
   data() {
     return {
-      stockRecordForCreate: new StockRecord("", "", 0),
+      stockRecordForCreate: new StockRecord("", "", 0, ""),
     };
   },
   methods: {

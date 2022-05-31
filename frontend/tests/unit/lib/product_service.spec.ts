@@ -3,6 +3,7 @@ import { IProductService, ListProductResponse } from "@/lib/interfaces";
 import { Product } from "@/lib/models";
 import { ProductService } from "@/lib/product_service";
 
+// TODO: repeated code
 const newHttpMock = () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post: jest.fn((): Promise<any> => {
@@ -214,7 +215,8 @@ describe("Products: delete", () => {
   });
 
   it("given an error while creating, should return error", async () => {
-    httpClient.delete = (): Promise<any> => Promise.resolve([new Error("error")]);
+    httpClient.delete = (): Promise<any> =>
+      Promise.resolve([new Error("error")]);
     const [error] = await productService.delete("123");
     expect(error).toBeInstanceOf(Error);
   });

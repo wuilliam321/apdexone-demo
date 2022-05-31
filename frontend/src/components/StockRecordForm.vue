@@ -45,6 +45,34 @@
         </div>
 
         <div class="mb-3">
+          <label for="category" class="form-label">Category:</label>
+          <input
+            type="text"
+            name="category"
+            v-model="stockRecordForSave.category"
+            class="form-control"
+            aria-describedby="categoryHelp"
+          />
+          <div id="nameHelp" class="form-text">
+            Enter the category of the stock record
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="size" class="form-label">Size:</label>
+          <input
+            type="text"
+            name="size"
+            v-model="stockRecordForSave.size"
+            class="form-control"
+            aria-describedby="sizeHelp"
+          />
+          <div id="nameHelp" class="form-text">
+            Enter the size of the stock record
+          </div>
+        </div>
+
+        <div class="mb-3">
           <button type="submit" class="btn btn-primary me-3">Submit</button>
           <button type="button" class="btn btn-secondary" @click="goBack">
             Cancel
@@ -69,7 +97,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      stockRecordForSave: new StockRecord("", "", 0),
+      stockRecordForSave: new StockRecord("", "", 0, ""),
     };
   },
   created() {

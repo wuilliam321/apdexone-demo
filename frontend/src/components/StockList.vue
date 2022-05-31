@@ -7,6 +7,8 @@
             <td class="stock-list__header">code</td>
             <td class="stock-list__header">product code</td>
             <td class="stock-list__header">quantity</td>
+            <td class="stock-list__header">category</td>
+            <td class="stock-list__header">size</td>
             <td class="stock-list__header">actions</td>
           </tr>
         </thead>

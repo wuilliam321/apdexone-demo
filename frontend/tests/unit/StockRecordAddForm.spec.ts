@@ -16,7 +16,7 @@ describe("StockRecordAddForm.vue", () => {
   beforeEach(() => {
     mockRoute = newMockRoute();
     mockRouter = newMockRouter();
-    stockRecord = new StockRecord("1234", "name", 1000);
+    stockRecord = new StockRecord("1234", "name", 1000, "CAT", "L");
     stockService = newStockServiceMock([stockRecord], []);
     wrapper = mount(StockRecordAddForm, {
       provide(): ServiceInjection {

@@ -6,6 +6,8 @@
           <tr>
             <td class="stock-report-list__header">product code</td>
             <td class="stock-report-list__header">quantity</td>
+            <td class="stock-report-list__header">category</td>
+            <td class="stock-report-list__header">size</td>
           </tr>
         </thead>
         <tbody class="stock-item">

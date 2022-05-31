@@ -13,7 +13,7 @@ describe("ProductAddButton.vue", () => {
     mockRouter = newMockRouter();
     wrapper = mount(ProductAddButton, {
       mocks: {
-        // $route: mockRoute,
+        $route: mockRoute,
         $router: mockRouter,
       },
     });

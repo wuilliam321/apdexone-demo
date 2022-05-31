@@ -98,39 +98,90 @@ export class ListStockResponse {
   }
 }
 
-type ProductQuantities = {
-  [key: string]: number[];
+type stockParserCallback = (value: [string, number[]], index: number, array: [string, number[]][]) => Stock;
+
+class ProductQuantities {
+  constructor(public records: StockRecord[]) { }
+
+  groupBy(fieldKey: keyof StockRecord, stockParserFn: stockParserCallback) {
+    let quantities: { [key: string]: number[] } = {};
+    for (let i = 0; i < this.records.length; i++) {
+      let stockRecord = this.records[i];
+      if (!quantities[`${stockRecord[fieldKey]}`]) {
+        quantities[`${stockRecord[fieldKey]}`] = [] as number[];
+      }
+      quantities[`${stockRecord[fieldKey]}`].push(stockRecord.quantity);
+    }
+    return Object.entries(quantities).map(stockParserFn);
+  }
 }
 
-export class ReportStockRequest { }
+export type ReportStockOptions = {
+  groupBy?: {
+    product_code?: boolean;
+    category?: boolean;
+    size?: boolean;
+  },
+}
+
+export type GroupByReportStock = "product_code" | "category" | "size";
+
+export class ReportStockRequest {
+  constructor(public groupBy?: GroupByReportStock) { }
+}
 export class ReportStockResponse {
-  private _stock: Stock[];
+  private _quantities: ProductQuantities;
 
-  constructor(private _records: StockRecord[]) {
-    this._stock = [] as Stock[];
-  }
-
-  toJSON(): Object {
-    return {
-      stock: this._stock,
-    };
+  constructor(private _records: StockRecord[], private _options?: ReportStockOptions) {
+    this._quantities = new ProductQuantities(this._records);
   }
 
   // TODO: we need to make it parameterized because we need to group, and a lot of things
   get records(): Stock[] {
-    let quantities: ProductQuantities = {};
-    if (this._records.length > 0) {
-      this._records.forEach(record => {
-        if (!quantities[record.product_code]) {
-          quantities[record.product_code] = [] as number[];
+    if (this.hasGroupBy()) {
+      const groupEntries = Object.entries(this._options!.groupBy!);
+      for (let i = 0; i < groupEntries.length; i++) {
+        const [field, enabled] = groupEntries[i];
+        if (field === 'product_code' && enabled) {
+          return this.byProductCode();
         }
-        quantities[record.product_code].push(record.quantity);
-      });
-      Object.entries(quantities).forEach(([productCode, quantities]) => {
-        this._stock.push(new Stock(productCode, quantities.reduce((a, b) => a + b, 0)));
-      });
+        if (field === 'category' && enabled) {
+          return this.byCategory();
+        }
+        if (field === 'size' && enabled) {
+          return this.bySize();
+        }
+        // TODO: add more groupings
+      }
     }
-    return this._stock;
+
+    return this.byProductCode();
+  }
+
+  private sum(quantities: number[]): number {
+    return quantities.reduce((a, b,) => a + b, 0);
+  }
+
+  private hasGroupBy(): boolean {
+    return !!(this._records.length > 0 && this._options && this._options.groupBy);
+  }
+
+  private byProductCode(): Stock[] {
+    return this._quantities.groupBy("product_code", ([productCode, quantities]): Stock => (
+      new Stock(productCode, this.sum(quantities), "*", "*")
+    ));
+  }
+
+  private byCategory(): Stock[] {
+    return this._quantities.groupBy("category", ([categoryField, quantities]): Stock => {
+      return new Stock('*', this.sum(quantities), categoryField, "*")
+    });
+  }
+
+  private bySize(): Stock[] {
+    return this._quantities.groupBy("size", ([sizeField, quantities]): Stock => {
+      return new Stock('*', this.sum(quantities), "*", sizeField)
+    });
   }
 }
 
@@ -145,12 +196,20 @@ export class CreateStockRecordResponse {
 }
 
 export class CreateStockRecordRequest {
-  constructor(public code: string, public product_code: string, public quantity: number) { }
+  constructor(
+    public code: string,
+    public product_code: string,
+    public quantity: number,
+    public category: string,
+    public size: string,
+  ) { }
 
   toJSON(): Object {
     return {
       product_code: this.product_code,
       quantity: this.quantity,
+      category: this.category,
+      size: this.size,
     };
   }
 }

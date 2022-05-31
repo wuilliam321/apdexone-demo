@@ -6,6 +6,12 @@
     <td class="stock-report-item__quantity">
       {{ stock.quantity }}
     </td>
+    <td class="stock-report-item__category">
+      {{ stock.category }}
+    </td>
+    <td class="stock-report-item__size">
+      {{ stock.size }}
+    </td>
   </tr>
 </template>
 

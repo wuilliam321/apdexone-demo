@@ -30,6 +30,8 @@ function routes(app: Express, server: HttpServer) {
    *             type: string
    *           quantity:
    *             type: number
+   *           category:
+   *             type: string
    *       Stock:
    *         type: object
    *         properties:
@@ -37,6 +39,8 @@ function routes(app: Express, server: HttpServer) {
    *             type: string
    *           quantity:
    *             type: number
+   *           category:
+   *             type: string
    *       Error:
    *         type: object
    *         properties:
@@ -294,6 +298,12 @@ function routes(app: Express, server: HttpServer) {
    * /stock/report:
    *   get:
    *     summary: Report of the stock
+   *     parameters:
+   *        - in: query
+   *          name: groupBy
+   *          schema:
+   *            type: string
+   *          description: Group the report by this field
    *     responses:
    *       201:
    *         description: successful operation
@@ -328,7 +338,7 @@ function routes(app: Express, server: HttpServer) {
       url: "/docs/swagger.json",
     },
   }
-  app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
+  app.get("/docs/swagger.json", (_req, res) => res.json(swaggerSpec));
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, options2));
 }
 

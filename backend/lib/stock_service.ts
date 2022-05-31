@@ -1,5 +1,5 @@
 import { IStockDatasource, IStockService } from "../lib/interfaces";
-import { CreateStockRecordRequest, CreateStockRecordResponse, ListStockRequest, ListStockResponse, ReportStockRequest, ReportStockResponse } from "../srv/models";
+import { CreateStockRecordRequest, CreateStockRecordResponse, ListStockRequest, ListStockResponse, ReportStockOptions, ReportStockRequest, ReportStockResponse } from "../srv/models";
 import { StockRecord } from "./models";
 
 class StockService implements IStockService {
@@ -13,7 +13,7 @@ class StockService implements IStockService {
     return [, new ListStockResponse(stocks!)];
   }
 
-  report(_req: ReportStockRequest): [Error?, ReportStockResponse?] {
+  report(req: ReportStockRequest): [Error?, ReportStockResponse?] {
     const [error, records] = this.stocksDS.list();
     if (error) {
       return [error,];
@@ -23,7 +23,13 @@ class StockService implements IStockService {
       return [, new ReportStockResponse([] as StockRecord[])];
     }
 
-    return [, new ReportStockResponse(records)];
+
+    const options: ReportStockOptions = { groupBy: {} };
+    if (req.groupBy && req.groupBy.length > 0) {
+      options.groupBy![req.groupBy] = true;
+    }
+
+    return [, new ReportStockResponse(records, options)];
   }
 
 
@@ -40,7 +46,7 @@ class StockService implements IStockService {
       return [new Error("quantity is required"),];
     }
 
-    const stockRecord = new StockRecord(req.code, req.product_code, req.quantity);
+    const stockRecord = new StockRecord(req.code, req.product_code, req.quantity, req.category, req.size);
     const [error, result] = this.stocksDS.add(stockRecord);
     if (error) {
       return [error,];

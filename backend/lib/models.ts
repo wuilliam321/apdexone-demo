@@ -11,24 +11,39 @@ export class Product {
 }
 
 export class Stock {
-  constructor(public product_code: string, public quantity: number) { }
+  constructor(
+    public product_code: string,
+    public quantity: number,
+    public category: string,
+    public size: string
+  ) { }
 
   toJSON(): Object {
     return {
       product_code: this.product_code,
       quantity: this.quantity,
+      category: this.category,
+      size: this.size,
     };
   }
 }
 
 export class StockRecord {
-  constructor(public code: string, public product_code: string, public quantity: number) { }
+  constructor(
+    public code: string,
+    public product_code: string,
+    public quantity: number,
+    public category: string,
+    public size: string
+  ) { }
 
   toJSON(): Object {
     return {
       code: this.code,
       product_code: this.product_code,
       quantity: this.quantity,
+      category: this.category,
+      size: this.size,
     };
   }
 }
