@@ -49,4 +49,8 @@ export const newStockServiceMock = (
   report: jest.fn((): Promise<[Error?, ReportStockResponse?]> => {
     return Promise.resolve([undefined, { stocks }]);
   }),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create: jest.fn((_stockRecord: StockRecord): Promise<[Error?, string?]> => {
+    return Promise.resolve([undefined, "a_code"]);
+  }),
 });

@@ -6,11 +6,6 @@
     <td class="stock-report-item__quantity">
       {{ stock.quantity }}
     </td>
-    <td class="stock-report-item__actions">
-      <div class="btn-group" role="group" aria-label="Actions">
-        edit/delete?
-      </div>
-    </td>
   </tr>
 </template>
 

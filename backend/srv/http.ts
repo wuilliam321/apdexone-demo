@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IProductsService, IStockService } from '../lib/interfaces';
-import { CreateProductRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, ListStockRequest, UpdateProductRequest } from './models';
+import { CreateProductRequest, CreateStockRecordRequest, DeleteProductRequest, GetProductRequest, ListProductRequest, ListStockRequest, UpdateProductRequest } from './models';
 
 class HttpServer {
   constructor(private productsService: IProductsService | undefined, private stocksService: IStockService | undefined) { }
@@ -18,12 +18,12 @@ class HttpServer {
       }
 
       if (!req.body.name) {
-        res.status(400).send({ message: 'name is required'});
+        res.status(400).send({ message: 'name is required' });
         return;
       }
 
       if (!req.body.price || req.body.price <= 0) {
-        res.status(400).send({ message:'price is required'});
+        res.status(400).send({ message: 'price is required' });
         return;
       }
 
@@ -71,17 +71,17 @@ class HttpServer {
       }
 
       if (!req.body.code) {
-        res.status(400).send({ message: 'code is required'});
+        res.status(400).send({ message: 'code is required' });
         return;
       }
 
       if (!req.body.name) {
-        res.status(400).send({ message:'name is required'});
+        res.status(400).send({ message: 'name is required' });
         return;
       }
 
       if (!req.body.price || req.body.price <= 0) {
-        res.status(400).send({ message:'price is required'});
+        res.status(400).send({ message: 'price is required' });
         return;
       }
 
@@ -100,7 +100,7 @@ class HttpServer {
   handleDeleteProduct(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
       if (!req.params.id || req.params.id === '') {
-        res.status(400).send({ message: 'code is required'});
+        res.status(400).send({ message: 'code is required' });
         return;
       }
 
@@ -125,6 +125,41 @@ class HttpServer {
         return;
       }
       res.status(201).send(result!.stocks);
+    }
+  }
+
+
+  handleCreateStockRecord(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      if (!req.body) {
+        res.status(400).send({ message: 'body is required' });
+        return;
+      }
+
+      if (!req.body.code) {
+        res.status(400).send({ message: 'code is required' });
+        return;
+      }
+
+      if (!req.body.product_code) {
+        res.status(400).send({ message: 'product_code is required' });
+        return;
+      }
+
+
+      let quantity = Number.parseInt(req.body.quantity);
+      if (Number.isNaN(quantity) || quantity === 0) {
+        res.status(400).send({ message: 'quantity is invalid' });
+        return;
+      }
+
+      const body = new CreateStockRecordRequest(req.body.code, req.body.product_code, Number.parseInt(req.body.quantity));
+      const [error, result] = this.stocksService!.create(body);
+      if (error) {
+        res.status(500).send({ message: error.message });
+        return;
+      }
+      res.status(201).send(result);
     }
   }
 

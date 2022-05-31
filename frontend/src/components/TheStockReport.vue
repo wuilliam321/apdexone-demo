@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TheToolbar />
+    <TheInventoryToolbar />
     <TheErrorMessage v-if="error" :error="error" />
     <StockReportList :stocks="stocks" />
   </div>
@@ -10,7 +10,7 @@
 import Vue, { VueConstructor } from "vue";
 import StockReportList from "@/components/StockReportList.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
-import TheToolbar from "@/components/TheToolbar.vue";
+import TheInventoryToolbar from "@/components/TheInventoryToolbar.vue";
 import { ReportStockParams, ServiceInjection } from "@/lib/interfaces";
 import { Stock } from "@/lib/models";
 
@@ -18,8 +18,8 @@ export default (Vue as VueConstructor<Vue & ServiceInjection>).extend({
   name: "TheStockReport",
   components: {
     StockReportList,
-    TheToolbar,
     TheErrorMessage,
+    TheInventoryToolbar,
   },
   inject: ["stockService"],
   data() {

@@ -10,15 +10,23 @@ class StocksLokiDatasource implements IStockDatasource {
       indices: ['code'],
       unique: ['code'],
     });
-    this.stocks.insert([new StockRecord("S1", "P1", 10)]);
-    this.stocks.insert([new StockRecord("S2", "P1", 10)]);
-    this.stocks.insert([new StockRecord("S3", "P2", 11)]);
-    this.stocks.insert([new StockRecord("S4", "P2", -1)]);
   }
 
   list(): [Error?, StockRecord[]?] {
     try {
       const res = this.stocks.find();
+      return [, res];
+    } catch (e) {
+      return [this.handleError(e as Error),];
+    }
+  }
+
+  add(stockRecord: StockRecord): [Error?, StockRecord?] {
+    try {
+      const res = this.stocks.insert(stockRecord);
+      if (!res) {
+        return [new Error('Failed to add stockRecord'),];
+      }
       return [, res];
     } catch (e) {
       return [this.handleError(e as Error),];

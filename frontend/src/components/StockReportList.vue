@@ -6,7 +6,6 @@
           <tr>
             <td class="stock-report-list__header">product code</td>
             <td class="stock-report-list__header">quantity</td>
-            <td class="stock-report-list__header">actions</td>
           </tr>
         </thead>
         <tbody class="stock-item">
@@ -42,10 +41,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.stock-list {
+.stock-report-list {
   border: 1px solid #ccc;
 }
-.stock-list__header {
+.stock-report-list__header {
   font-weight: bold;
   border-bottom: 1px solid #ccc;
 }

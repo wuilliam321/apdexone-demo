@@ -99,7 +99,7 @@ export class ListStockResponse {
 }
 
 type ProductQuantities = {
-    [key: string]: number[];
+  [key: string]: number[];
 }
 
 export class ReportStockRequest { }
@@ -116,6 +116,7 @@ export class ReportStockResponse {
     };
   }
 
+  // TODO: we need to make it parameterized because we need to group, and a lot of things
   get records(): Stock[] {
     let quantities: ProductQuantities = {};
     if (this._records.length > 0) {
@@ -130,5 +131,26 @@ export class ReportStockResponse {
       });
     }
     return this._stock;
+  }
+}
+
+export class CreateStockRecordResponse {
+  constructor(public product_code: string) { }
+
+  toJSON(): Object {
+    return {
+      product_code: this.product_code,
+    };
+  }
+}
+
+export class CreateStockRecordRequest {
+  constructor(public code: string, public product_code: string, public quantity: number) { }
+
+  toJSON(): Object {
+    return {
+      product_code: this.product_code,
+      quantity: this.quantity,
+    };
   }
 }

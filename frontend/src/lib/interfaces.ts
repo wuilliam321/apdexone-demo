@@ -43,4 +43,5 @@ export class ReportStockResponse {
 export interface IStockService {
   list(params?: ListStockParams): Promise<[Error?, ListStockResponse?]>;
   report(params?: ReportStockParams): Promise<[Error?, ReportStockResponse?]>;
+  create(stockRecord: StockRecord): Promise<[Error?, string?]>;
 }

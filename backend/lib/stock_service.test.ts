@@ -2,7 +2,7 @@ import StockService from './stock_service';
 import { Stock, StockRecord } from '../lib/models';
 import { StockDatasourceMock } from '../helpers/tests';
 import { IStockDatasource, IStockService } from '../lib/interfaces';
-import { ListStockRequest, ReportStockRequest } from '../srv/models';
+import { CreateStockRecordRequest, ListStockRequest, ReportStockRequest } from '../srv/models';
 
 describe("Stock List", () => {
   let ds: IStockDatasource;
@@ -111,6 +111,42 @@ describe("Stock Report", () => {
   test("given an error in datasource while getting records, should return error", () => {
     ds.list = () => [new Error("error"),];
     const [error,] = stocksService.report(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+});
+
+describe("StockRecords Create", () => {
+  let dsMock: IStockDatasource;
+  let stockService: IStockService;
+  let request: CreateStockRecordRequest;
+
+  beforeEach(() => {
+    dsMock = new StockDatasourceMock();
+    stockService = new StockService(dsMock);
+    request = new CreateStockRecordRequest("12", "a_code", 1000)
+  });
+
+  test("create", () => {
+    const [, response] = stockService.create(request);
+    expect(response!.product_code).toBe("a_code");
+  });
+
+  test("given an invalid code, should return error", () => {
+    request.code = "";
+    const [error,] = stockService.create(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  test("given an invalid product code, should return error", () => {
+    request.product_code = "";
+    const [error,] = stockService.create(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  test("given an error in datasource while saving stockRecord, should return error", () => {
+    dsMock.add = (_stockRecord: StockRecord): [Error?, StockRecord?] => [new Error("error"),];
+    stockService = new StockService(dsMock);
+    const [error,] = stockService.create(request);
     expect(error).toBeInstanceOf(Error);
   });
 });

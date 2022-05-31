@@ -1,6 +1,7 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import TheStockReport from "@/components/TheStockReport.vue";
 import StockReportList from "@/components/StockReportList.vue";
+import StockRecordAddButton from "@/components/StockRecordAddButton.vue";
 import TheErrorMessage from "@/components/TheErrorMessage.vue";
 import {
   IStockService,
@@ -30,6 +31,7 @@ describe("TheStockReport.vue", () => {
 
   it("should render the report", () => {
     expect(wrapper.findComponent(StockReportList).exists()).toBe(true);
+    expect(wrapper.findComponent(StockRecordAddButton).exists()).toBe(true);
     expect(wrapper.findComponent(TheErrorMessage).exists()).toBe(false);
   });
 

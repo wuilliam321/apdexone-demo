@@ -7,7 +7,7 @@ import {
   ReportStockResponse,
 } from "./interfaces";
 import { Stock, StockRecord } from "./models";
-// import { Validate } from "./validations";
+import { Validate } from "./validations";
 
 export class StockService implements IStockService {
   constructor(private http: HttpClient) {}
@@ -44,5 +44,29 @@ export class StockService implements IStockService {
     }
 
     return [undefined, new ReportStockResponse([] as Stock[])];
+  }
+
+  async create(stockRecord: StockRecord): Promise<[Error?, string?]> {
+    const [error, isValid] = Validate.saveStockRecord(stockRecord);
+    if (!isValid) {
+      return [error];
+    }
+
+    const [err, res] = await this.http.post<
+      StockRecord,
+      HttpResponse<StockRecord>
+    >("/stock", undefined, {
+      code: stockRecord.code,
+      product_code: stockRecord.product_code,
+      quantity: stockRecord.quantity,
+    });
+    if (err) {
+      return [err];
+    }
+    if (res && res.status === 201) {
+      return [undefined, res?.data.code];
+    }
+
+    return [undefined, ""];
   }
 }

@@ -2,6 +2,8 @@ import { Product, StockRecord } from "./models";
 import {
   CreateProductRequest,
   CreateProductResponse,
+  CreateStockRecordRequest,
+  CreateStockRecordResponse,
   DeleteProductRequest,
   DeleteProductResponse,
   GetProductRequest,
@@ -35,9 +37,11 @@ export interface IProductsService {
 
 export interface IStockDatasource {
   list(): [Error?, StockRecord[]?];
+  add(stockRecord: StockRecord): [Error?, StockRecord?];
 }
 
 export interface IStockService {
   list(req: ListStockRequest): [Error?, ListStockResponse?];
   report(req: ReportStockRequest): [Error?, ReportStockResponse?];
+  create(req: CreateStockRecordRequest): [Error?, CreateStockRecordResponse?];
 }

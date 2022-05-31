@@ -44,6 +44,11 @@ const routes: Array<RouteConfig> = [
         components: { inventory: () => import("../views/StockView.vue") },
       },
       {
+        path: "stock/add",
+        name: "stock.add",
+        components: { inventory: () => import("../views/StockAddView.vue") },
+      },
+      {
         path: "stock/report",
         name: "stock.report",
         components: { inventory: () => import("../views/StockReportView.vue") },

@@ -256,6 +256,38 @@ function routes(app: Express, server: HttpServer) {
    */
   app.get('/stock', server.handleListStock());
 
+  /**
+   * @openapi
+   * /stock:
+   *   post:
+   *     summary: Creates a stock record
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/StockRecord'
+   *     responses:
+   *       201:
+   *         description: successful operation
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/CreateStockRecordResponse'
+   *       400:
+   *         description: User input errors
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Server error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   */
+  app.post('/stock', server.handleCreateStockRecord());
+
 
   /**
    * @openapi

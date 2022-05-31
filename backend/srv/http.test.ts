@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import HttpServer from './http';
-import { CreateProductRequest, CreateProductResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, ListStockRequest, ListStockResponse, ReportStockRequest, ReportStockResponse, UpdateProductRequest, UpdateProductResponse } from './models';
+import { CreateProductRequest, CreateProductResponse, CreateStockRecordRequest, CreateStockRecordResponse, DeleteProductRequest, DeleteProductResponse, GetProductRequest, GetProductResponse, ListProductRequest, ListProductResponse, ListStockRequest, ListStockResponse, ReportStockRequest, ReportStockResponse, UpdateProductRequest, UpdateProductResponse } from './models';
 import { ProductDatasourceMock, StockDatasourceMock } from '../helpers/tests';
 import { Product, Stock, StockRecord } from '../lib/models';
 import ProductsService from '../lib/products_service';
@@ -92,7 +92,7 @@ describe('ProductsHttp Create', () => {
     });
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 });
 
@@ -145,7 +145,7 @@ describe('ProductsHttp List', () => {
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 
 
@@ -164,7 +164,7 @@ describe('ProductsHttp Get', () => {
   });
 
   test('given a product id, should return it', () => {
-    const  product = new Product('123', 'test', 10);
+    const product = new Product('123', 'test', 10);
     service.get = (_req: GetProductRequest): [Error?, GetProductResponse?] => {
       return [, new GetProductResponse(product)];
     };
@@ -204,7 +204,7 @@ describe('ProductsHttp Get', () => {
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 });
 
@@ -293,7 +293,7 @@ describe('ProductsHttp Update', () => {
     });
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 });
 
@@ -342,7 +342,7 @@ describe('ProductsHttp Delete', () => {
     });
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 });
 
@@ -394,7 +394,7 @@ describe('StocksHttp List', () => {
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 
 
@@ -455,6 +455,124 @@ describe('StocksHttp Report', () => {
     const req = getMockReq();
     const { res } = getMockRes();
     handler(req, res);
-    expect(res.send).toHaveBeenCalledWith({message: "test"});
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
+  });
+});
+
+describe('StocksHttp Create stock record', () => {
+  let server: HttpServer;
+  let service: IStockService;
+  let handler: (req: any, res: any) => void;
+
+  beforeEach(() => {
+    service = new StockService(new StockDatasourceMock());
+    server = new HttpServer(undefined, service);
+    handler = server.handleCreateStockRecord();
+  });
+
+  test('given a stock creation request, should create it', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 10,
+        // TODO: eventually add more values to identify the transaction
+      }
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledTimes(1);
+  });
+
+  test('given a stock creation request (with qty as text), should create it', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: "10",
+      }
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledTimes(1);
+  });
+
+  test('given an invalid body, should return 400 error', () => {
+    const req = getMockReq({
+      body: null,
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid code, should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '',
+        product_code: '123',
+        quantity: 10,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid product code, should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '',
+        quantity: 10,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid quantity, should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: null,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an text as quantity, should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: "invalid",
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an internal error, should return 500 error', () => {
+    service.create = (_req: CreateStockRecordRequest): [Error?, CreateStockRecordResponse?] => {
+      return [new Error('test'),];
+    };
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 10,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.send).toHaveBeenCalledWith({ message: "test" });
   });
 });

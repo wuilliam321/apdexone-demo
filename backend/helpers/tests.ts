@@ -31,4 +31,8 @@ export class StockDatasourceMock implements IStockDatasource {
   list(): [Error?, StockRecord[]?] {
     return [, [] as StockRecord[]];
   }
+
+  add(stockRecord: StockRecord): [Error?, StockRecord?] {
+    return [, stockRecord];
+  }
 }
