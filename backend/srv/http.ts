@@ -159,12 +159,17 @@ class HttpServer {
         //   return;
         req.body.size = 'none';
       }
-      //
+
       // TODO: not tested
       if (!req.body.color) {
         //   res.status(400).send({ message: 'color is required' });
         //   return;
         req.body.color = 'none';
+      }
+
+      if (!req.body.amount || Number.isNaN(Number(req.body.amount))) {
+          res.status(400).send({ message: 'amount is required' });
+          return;
       }
 
       let quantity = Number.parseInt(req.body.quantity);
@@ -179,7 +184,8 @@ class HttpServer {
         Number.parseInt(req.body.quantity),
         req.body.category,
         req.body.size,
-        req.body.color
+        req.body.color,
+        req.body.amount
       );
       const [error, result] = this.stocksService!.create(body);
       if (error) {

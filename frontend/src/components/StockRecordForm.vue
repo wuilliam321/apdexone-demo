@@ -87,6 +87,20 @@
         </div>
 
         <div class="mb-3">
+          <label for="amount" class="form-label">Amount:</label>
+          <input
+            type="number"
+            name="amount"
+            v-model="stockRecordForSave.amount"
+            class="form-control"
+            aria-describedby="amountHelp"
+          />
+          <div id="nameHelp" class="form-text">
+            Enter the amount of the stock record
+          </div>
+        </div>
+
+        <div class="mb-3">
           <button type="submit" class="btn btn-primary me-3">Submit</button>
           <button type="button" class="btn btn-secondary" @click="goBack">
             Cancel
@@ -111,7 +125,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      stockRecordForSave: new StockRecord("", "", 0, ""),
+      stockRecordForSave: new StockRecord("", "", 0, "", "", "", 0),
     };
   },
   created() {

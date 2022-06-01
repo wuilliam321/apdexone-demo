@@ -15,7 +15,7 @@ const newHttpMock = () => ({
   }),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get: jest.fn((): Promise<any> => {
-    const stockRecords = [new StockRecord("123", "test", 1000, "CAT", "L", "red")];
+    const stockRecords = [new StockRecord("123", "test", 1000, "CAT", "L", "red", 1.0)];
     const response = {
       status: 201,
       data: stockRecords,
@@ -50,7 +50,7 @@ describe("StockRecords: create", () => {
   });
 
   it("given a valid stockRecord, should create it", async () => {
-    const stockRecord = new StockRecord("123", "name", 1000, "CAT", "L", "red");
+    const stockRecord = new StockRecord("123", "name", 1000, "CAT", "L", "red", 1.0);
     const [, res] = await stockService.create(stockRecord);
     const body = {
       code: stockRecord.code,
@@ -59,32 +59,33 @@ describe("StockRecords: create", () => {
       category: stockRecord.category,
       size: stockRecord.size,
       color: stockRecord.color,
+      amount: stockRecord.amount,
     };
     expect(res).toBe(stockRecord.code);
     expect(httpClient.post).toBeCalledWith("/stock", undefined, body);
   });
 
   it("given an invalid code, should return error", async () => {
-    const stockRecord = new StockRecord("", "name", 1000, "CAT", "L", "red");
+    const stockRecord = new StockRecord("", "name", 1000, "CAT", "L", "red", 1.0);
     const [error] = await stockService.create(stockRecord);
     expect(error).toBeInstanceOf(Error);
   });
 
   it("given an invalid product code, should return error", async () => {
-    const stockRecord = new StockRecord("123", "", 1000, "CAT", "L", "red");
+    const stockRecord = new StockRecord("123", "", 1000, "CAT", "L", "red", 1.0);
     const [error] = await stockService.create(stockRecord);
     expect(error).toBeInstanceOf(Error);
   });
 
   it("given an invalid quantity, should return error", async () => {
-    const stockRecord = new StockRecord("123", "name", 0, "CAT", "L", "red");
+    const stockRecord = new StockRecord("123", "name", 0, "CAT", "L", "red", 1.0);
     const [error] = await stockService.create(stockRecord);
     expect(error).toBeInstanceOf(Error);
   });
 
   it("given an error while creating, should return error", async () => {
     httpClient.post = (): Promise<any> => Promise.resolve([new Error("error")]);
-    const stockRecord = new StockRecord("123", "name", 1000, "CAT", "L", "red");
+    const stockRecord = new StockRecord("123", "name", 1000, "CAT", "L", "red", 1.0);
     const [error] = await stockService.create(stockRecord);
     expect(error).toBeInstanceOf(Error);
   });
@@ -102,7 +103,7 @@ describe("StockRecords: list", () => {
   it("given a list request, should return all stock", async () => {
     const [, res] = await stockService.list();
     const records = new ListStockResponse([
-      new StockRecord("123", "test", 1000, "CAT", "L", "red"),
+      new StockRecord("123", "test", 1000, "CAT", "L", "red", 1.0),
     ]);
     expect(res).toEqual(records);
     expect(httpClient.get).toBeCalledWith("/stock", undefined);
@@ -122,7 +123,7 @@ describe("StockRecords: report", () => {
   beforeEach(() => {
     httpClient = newHttpMock();
     httpClient.get = jest.fn((): Promise<any> => {
-      const stocks = [new Stock("123", 10, "CAT", "L", "red")]
+      const stocks = [new Stock("123", 10, "CAT", "L", "red", 1.0)]
       const response = {
         status: 201,
         data: stocks,
@@ -136,7 +137,7 @@ describe("StockRecords: report", () => {
     const params = new ReportStockParams();
     const [, res] = await stockService.report(params);
     const stocks = new ReportStockResponse([
-      new Stock("123", 10, "CAT", "L", "red"),
+      new Stock("123", 10, "CAT", "L", "red", 1.0),
     ]);
     expect(res).toEqual(stocks);
     expect(httpClient.get).toBeCalledWith("/stock/report", undefined);

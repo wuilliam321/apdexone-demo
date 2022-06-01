@@ -213,6 +213,7 @@ export class CreateStockRecordRequest {
     public category: string,
     public size: string,
     public color: string,
+    public amount: number,
   ) { }
 
   toJSON(): Object {
@@ -222,6 +223,7 @@ export class CreateStockRecordRequest {
       category: this.category,
       size: this.size,
       color: this.color,
+      amount: this.amount,
     };
   }
 }

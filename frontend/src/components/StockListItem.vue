@@ -18,6 +18,9 @@
     <td class="stock-item__color">
       {{ record.color }}
     </td>
+    <td class="stock-item__amount">
+      {{ record.amount }}
+    </td>
     <td class="stock-item__actions">
       <div class="btn-group" role="group" aria-label="Actions">
         edit/delete?

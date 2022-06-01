@@ -12,10 +12,11 @@ describe("StockRecordForm.vue", () => {
   let categoryInput: Wrapper<Vue, HTMLInputElement>;
   let sizeInput: Wrapper<Vue, HTMLInputElement>;
   let colorInput: Wrapper<Vue, HTMLInputElement>;
+  let amountInput: Wrapper<Vue, HTMLInputElement>;
   let submitButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    stockRecord = new StockRecord("1234", "P1", 1000, "CAT", "L", "red");
+    stockRecord = new StockRecord("1234", "P1", 1000, "CAT", "L", "red", 1.0);
     wrapper = mount(StockRecordForm, {
       propsData: {
         stockRecord: stockRecord,
@@ -29,6 +30,7 @@ describe("StockRecordForm.vue", () => {
     categoryInput = wrapper.find("input[name=category]");
     sizeInput = wrapper.find("input[name=size]");
     colorInput = wrapper.find("input[name=color]");
+    amountInput = wrapper.find("input[name=amount]");
     submitButton = wrapper.find("button[type=submit]");
   });
 
@@ -40,6 +42,7 @@ describe("StockRecordForm.vue", () => {
     expect(categoryInput.exists()).toBe(true);
     expect(sizeInput.exists()).toBe(true);
     expect(colorInput.exists()).toBe(true);
+    expect(amountInput.exists()).toBe(true);
     expect(submitButton.exists()).toBe(true);
     expect(codeInput.element.value).toBe(stockRecord.code);
     expect(productCodeInput.element.value).toBe(stockRecord.product_code);
@@ -47,6 +50,7 @@ describe("StockRecordForm.vue", () => {
     expect(categoryInput.element.value).toBe(stockRecord.category);
     expect(sizeInput.element.value).toBe(stockRecord.size);
     expect(colorInput.element.value).toBe(stockRecord.color);
+    expect(amountInput.element.value).toBe(stockRecord.amount.toString());
   });
 
   it("should emit a save event on submit", () => {

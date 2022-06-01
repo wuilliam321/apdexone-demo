@@ -19,7 +19,7 @@ describe('ReportStockResponse reports', () => {
 
   test('given a single record, should return one single stock record', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red", 1.0),
     ];
     expected = [
       new Stock('P1', 1, "*", "*", "*"),
@@ -30,8 +30,8 @@ describe('ReportStockResponse reports', () => {
 
   test('given two records of same product, should return one single stock record', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
-      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red", 1.0),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red", 1.0),
     ];
     expected = [
       new Stock('P1', 3, "*", "*", "*"),
@@ -42,10 +42,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given multiple records of different products (group by category), should return two stock records', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
-      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
-      new StockRecord('3', 'P2', 1, "CAT", "L", "red"),
-      new StockRecord('4', 'P2', 2, "CAT", "L", "red"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red", 1.0),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red", 1.0),
+      new StockRecord('3', 'P2', 1, "CAT", "L", "red", 1.0),
+      new StockRecord('4', 'P2', 2, "CAT", "L", "red", 1.0),
     ];
     options = {
       groupBy: {
@@ -61,10 +61,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given multiple records of different products (group by size), should return two stock records', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
-      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
-      new StockRecord('3', 'P2', 1, "CAT", "M", "red"),
-      new StockRecord('4', 'P2', 2, "CAT", "M", "red"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red", 1.0),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red", 1.0),
+      new StockRecord('3', 'P2', 1, "CAT", "M", "red", 1.0),
+      new StockRecord('4', 'P2', 2, "CAT", "M", "red", 1.0),
     ];
     options = {
       groupBy: {
@@ -81,10 +81,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given multiple records of different products (group by color), should return two stock records', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
-      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
-      new StockRecord('3', 'P2', 1, "CAT", "M", "blue"),
-      new StockRecord('4', 'P2', 2, "CAT", "M", "blue"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red", 1.0),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red", 1.0),
+      new StockRecord('3', 'P2', 1, "CAT", "M", "blue", 1.0),
+      new StockRecord('4', 'P2', 2, "CAT", "M", "blue", 1.0),
     ];
     options = {
       groupBy: {

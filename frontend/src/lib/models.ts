@@ -9,7 +9,8 @@ export class StockRecord {
     public quantity: number,
     public category: string,
     public size: string,
-    public color: string
+    public color: string,
+    public amount: number
   ) {}
 }
 
@@ -19,6 +20,7 @@ export class Stock {
     public quantity: number,
     public category: string,
     public size: string,
-    public color: string
+    public color: string,
+    public amount: number
   ) {}
 }

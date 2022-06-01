@@ -476,6 +476,10 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '123',
         quantity: 10,
+        category: 'CAT',
+        size: 'L',
+        color: 'red',
+        amount: 1,
         // TODO: eventually add more values to identify the transaction
       }
     });
@@ -491,6 +495,7 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '123',
         quantity: "10",
+        amount: 1,
       }
     });
     const { res } = getMockRes();
@@ -514,6 +519,7 @@ describe('StocksHttp Create stock record', () => {
         code: '',
         product_code: '123',
         quantity: 10,
+        amount: 1,
       },
     });
     const { res } = getMockRes();
@@ -527,6 +533,7 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '',
         quantity: 10,
+        amount: 1,
       },
     });
     const { res } = getMockRes();
@@ -540,11 +547,111 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '123',
         quantity: null,
+        amount: 1,
       },
     });
     const { res } = getMockRes();
     handler(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid quantity (string), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 'invalid',
+        amount: 1,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid quantity (empty), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: '',
+        amount: 1,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid quantity (NaN), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: NaN,
+        amount: 1,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid amount (NaN), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 1,
+        amount: NaN,
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid amount (empty), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 1,
+        amount: "",
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an invalid amount (string), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 1,
+        amount: "invalid",
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test('given an valid amount (string), should return 400 error', () => {
+    const req = getMockReq({
+      body: {
+        code: '123',
+        product_code: '123',
+        quantity: 1,
+        amount: "1",
+      },
+    });
+    const { res } = getMockRes();
+    handler(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledTimes(1);
   });
 
   test('given an text as quantity, should return 400 error', () => {
@@ -553,6 +660,7 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '123',
         quantity: "invalid",
+        amount: 1,
       },
     });
     const { res } = getMockRes();
@@ -569,6 +677,7 @@ describe('StocksHttp Create stock record', () => {
         code: '123',
         product_code: '123',
         quantity: 10,
+        amount: 1,
       },
     });
     const { res } = getMockRes();

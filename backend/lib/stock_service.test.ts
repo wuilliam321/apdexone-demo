@@ -21,7 +21,7 @@ describe("Stock List", () => {
   });
 
   test("list with stocks", () => {
-    const records = [new StockRecord("a_code", "P1", 10, "CAT", "L", "red")]
+    const records = [new StockRecord("a_code", "P1", 10, "CAT", "L", "red", 1.0)]
     ds.list = () => [, records];
     const [, response] = stocksService.list(request);
     expect(response!.stocks).toEqual(records);
@@ -52,8 +52,8 @@ describe("Stock Report", () => {
 
   test("report with records, same product addition", () => {
     const records = [
-      new StockRecord("MM1", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM2", "P1", 10, "CAT", "L", "red"),
+      new StockRecord("MM1", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM2", "P1", 10, "CAT", "L", "red", 1.0),
     ] as StockRecord[]
     const expected = [
       new Stock("P1", 20, "*", "*", "*"),
@@ -65,10 +65,10 @@ describe("Stock Report", () => {
 
   test("report with records, group by category", () => {
     const records = [
-      new StockRecord("MM1", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM2", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM3", "P2", 10, "CAT", "L", "red"),
-      new StockRecord("MM4", "P3", 10, "CAT2", "L", "red"),
+      new StockRecord("MM1", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM2", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM3", "P2", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM4", "P3", 10, "CAT2", "L", "red", 1.0),
     ] as StockRecord[]
     const expected = [
       new Stock("*", 30, "CAT", "*", "*"),
@@ -82,9 +82,9 @@ describe("Stock Report", () => {
 
   test("report with records, different product addition", () => {
     const records = [
-      new StockRecord("MM1", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM2", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM3", "P2", 10, "CAT", "L", "red"),
+      new StockRecord("MM1", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM2", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM3", "P2", 10, "CAT", "L", "red", 1.0),
     ] as StockRecord[]
     const expected = [
       new Stock("P1", 20, "*", "*", "*"),
@@ -97,10 +97,10 @@ describe("Stock Report", () => {
 
   test("report with records, with a 0 qty product", () => {
     const records = [
-      new StockRecord("MM1", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM2", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM3", "P2", 10, "CAT", "L", "red"),
-      new StockRecord("MM4", "P3", 0, "CAT", "L", "red"),
+      new StockRecord("MM1", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM2", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM3", "P2", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM4", "P3", 0, "CAT", "L", "red", 1.0),
     ] as StockRecord[]
     const expected = [
       new Stock("P1", 20, "*", "*", "*"),
@@ -114,8 +114,8 @@ describe("Stock Report", () => {
 
   test("report with records, with substraction", () => {
     const records = [
-      new StockRecord("MM1", "P1", 10, "CAT", "L", "red"),
-      new StockRecord("MM2", "P1", -10, "CAT", "L", "red"),
+      new StockRecord("MM1", "P1", 10, "CAT", "L", "red", 1.0),
+      new StockRecord("MM2", "P1", -10, "CAT", "L", "red", 1.0),
     ] as StockRecord[]
     const expected = [
       new Stock("P1", 0, "*", "*", "*"),
@@ -140,7 +140,7 @@ describe("StockRecords Create", () => {
   beforeEach(() => {
     dsMock = new StockDatasourceMock();
     stockService = new StockService(dsMock);
-    request = new CreateStockRecordRequest("12", "a_code", 1000, "CAT", "L", "red")
+    request = new CreateStockRecordRequest("12", "a_code", 1000, "CAT", "L", "red", 1.0)
   });
 
   test("create", () => {
@@ -156,6 +156,12 @@ describe("StockRecords Create", () => {
 
   test("given an invalid product code, should return error", () => {
     request.product_code = "";
+    const [error,] = stockService.create(request);
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  test("given an invalid amount, should return error", () => {
+    request.amount = NaN;
     const [error,] = stockService.create(request);
     expect(error).toBeInstanceOf(Error);
   });

@@ -21,8 +21,8 @@ describe("TheStockReport.vue", () => {
   let radios: WrapperArray<Vue>;
 
   beforeEach(() => {
-    records = [new StockRecord("1234", "P1", 10, "CAT", "L", "red")];
-    stocks = [new Stock("P1", 10, "CAT", "L", "red")];
+    records = [new StockRecord("1234", "P1", 10, "CAT", "L", "red", 1.0)];
+    stocks = [new Stock("P1", 10, "CAT", "L", "red", 1.0)];
     stockService = newStockServiceMock(records, stocks);
     wrapper = mount(TheStockReport, {
       provide(): ServiceInjection {

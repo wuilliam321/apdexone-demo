@@ -42,11 +42,23 @@ class StockService implements IStockService {
       return [new Error("product_code is required"),];
     }
 
-    if (!Number.isInteger(req.quantity)) {
+    if (Number.isNaN(Number(req.quantity))) {
       return [new Error("quantity is required"),];
     }
 
-    const stockRecord = new StockRecord(req.code, req.product_code, req.quantity, req.category, req.size, req.color);
+    if (Number.isNaN(Number(req.amount))) {
+      return [new Error("amount is required"),];
+    }
+
+    const stockRecord = new StockRecord(
+      req.code,
+      req.product_code,
+      req.quantity,
+      req.category,
+      req.size,
+      req.color,
+      req.amount,
+    );
     const [error, result] = this.stocksDS.add(stockRecord);
     if (error) {
       return [error,];

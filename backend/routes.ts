@@ -32,6 +32,12 @@ function routes(app: Express, server: HttpServer) {
    *             type: number
    *           category:
    *             type: string
+   *           size:
+   *             type: string
+   *           color:
+   *             type: string
+   *           amount:
+   *             type: number
    *       Stock:
    *         type: object
    *         properties:
@@ -41,6 +47,12 @@ function routes(app: Express, server: HttpServer) {
    *             type: number
    *           category:
    *             type: string
+   *           size:
+   *             type: string
+   *           color:
+   *             type: string
+   *           amount:
+   *             type: number
    *       Error:
    *         type: object
    *         properties:

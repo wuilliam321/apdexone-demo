@@ -37,7 +37,8 @@ export class StockRecord {
     public quantity: number,
     public category: string,
     public size: string,
-    public color: string
+    public color: string,
+    public amount: number
   ) { }
 
   toJSON(): Object {
@@ -48,6 +49,7 @@ export class StockRecord {
       category: this.category,
       size: this.size,
       color: this.color,
+      amount: this.amount,
     };
   }
 }
