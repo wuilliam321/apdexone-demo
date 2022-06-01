@@ -9,6 +9,7 @@
             <td class="stock-list__header">quantity</td>
             <td class="stock-list__header">category</td>
             <td class="stock-list__header">size</td>
+            <td class="stock-list__header">color</td>
             <td class="stock-list__header">actions</td>
           </tr>
         </thead>

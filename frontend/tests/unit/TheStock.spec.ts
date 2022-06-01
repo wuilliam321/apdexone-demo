@@ -18,7 +18,7 @@ describe("TheStock.vue", () => {
   let wrapper: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    records = [new StockRecord("1234", "P1", 10, "CAT", "L")];
+    records = [new StockRecord("1234", "P1", 10, "CAT", "L", "red")];
     stockService = newStockServiceMock(records, []);
     wrapper = mount(TheStock, {
       provide(): ServiceInjection {

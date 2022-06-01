@@ -73,6 +73,20 @@
         </div>
 
         <div class="mb-3">
+          <label for="color" class="form-label">Color:</label>
+          <input
+            type="text"
+            name="color"
+            v-model="stockRecordForSave.color"
+            class="form-control"
+            aria-describedby="colorHelp"
+          />
+          <div id="nameHelp" class="form-text">
+            Enter the color of the stock record
+          </div>
+        </div>
+
+        <div class="mb-3">
           <button type="submit" class="btn btn-primary me-3">Submit</button>
           <button type="button" class="btn btn-secondary" @click="goBack">
             Cancel

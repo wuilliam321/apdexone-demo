@@ -46,7 +46,7 @@ class StockService implements IStockService {
       return [new Error("quantity is required"),];
     }
 
-    const stockRecord = new StockRecord(req.code, req.product_code, req.quantity, req.category, req.size);
+    const stockRecord = new StockRecord(req.code, req.product_code, req.quantity, req.category, req.size, req.color);
     const [error, result] = this.stocksDS.add(stockRecord);
     if (error) {
       return [error,];

@@ -64,6 +64,7 @@ export class StockService implements IStockService {
       quantity: stockRecord.quantity,
       category: stockRecord.category,
       size: stockRecord.size,
+      color: stockRecord.color,
     });
     if (err) {
       return [err];

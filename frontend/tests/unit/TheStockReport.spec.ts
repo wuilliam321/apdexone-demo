@@ -21,8 +21,8 @@ describe("TheStockReport.vue", () => {
   let radios: WrapperArray<Vue>;
 
   beforeEach(() => {
-    records = [new StockRecord("1234", "P1", 10, "CAT", "L")];
-    stocks = [new Stock("P1", 10, "CAT", "L")];
+    records = [new StockRecord("1234", "P1", 10, "CAT", "L", "red")];
+    stocks = [new Stock("P1", 10, "CAT", "L", "red")];
     stockService = newStockServiceMock(records, stocks);
     wrapper = mount(TheStockReport, {
       provide(): ServiceInjection {
@@ -36,7 +36,7 @@ describe("TheStockReport.vue", () => {
     expect(wrapper.findComponent(StockReportList).exists()).toBe(true);
     expect(wrapper.findComponent(StockRecordAddButton).exists()).toBe(true);
     expect(wrapper.findComponent(TheErrorMessage).exists()).toBe(false);
-    expect(radios.length).toBe(3);
+    expect(radios.length).toBe(4);
   });
 
   it("should fetch records and send them to the stock report", (done) => {
@@ -70,6 +70,20 @@ describe("TheStockReport.vue", () => {
     radios.at(2).setChecked();
     expect(stockService.report).toHaveBeenCalledTimes(2);
     const params = new ReportStockParams("size");
+    expect(stockService.report).toHaveBeenCalledWith(params)
+    setTimeout(() => {
+      expect(wrapper.findComponent(StockReportList).props().stocks).toEqual(
+        stocks
+      );
+      done();
+    });
+  });
+
+  it("should fetch records by color and send them to the stock report on radio change", (done) => {
+    // TODO: too tightly coupled to the position
+    radios.at(3).setChecked();
+    expect(stockService.report).toHaveBeenCalledTimes(2);
+    const params = new ReportStockParams("color");
     expect(stockService.report).toHaveBeenCalledWith(params)
     setTimeout(() => {
       expect(wrapper.findComponent(StockReportList).props().stocks).toEqual(

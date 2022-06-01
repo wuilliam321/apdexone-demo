@@ -8,7 +8,8 @@ export class StockRecord {
     public product_code: string,
     public quantity: number,
     public category: string,
-    public size: string
+    public size: string,
+    public color: string
   ) {}
 }
 
@@ -17,6 +18,7 @@ export class Stock {
     public product_code: string,
     public quantity: number,
     public category: string,
-    public size: string
+    public size: string,
+    public color: string
   ) {}
 }

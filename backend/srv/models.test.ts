@@ -19,10 +19,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given a single record, should return one single stock record', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
     ];
     expected = [
-      new Stock('P1', 1, "*", "*"),
+      new Stock('P1', 1, "*", "*", "*"),
     ];
     let res = new ReportStockResponse(stockRecords);
     expect(res.records).toEqual(expected);
@@ -30,11 +30,11 @@ describe('ReportStockResponse reports', () => {
 
   test('given two records of same product, should return one single stock record', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L"),
-      new StockRecord('2', 'P1', 2, "CAT", "L"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
     ];
     expected = [
-      new Stock('P1', 3, "*", "*"),
+      new Stock('P1', 3, "*", "*", "*"),
     ];
     let res = new ReportStockResponse(stockRecords);
     expect(res.records).toEqual(expected);
@@ -42,10 +42,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given multiple records of different products (group by category), should return two stock records', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L"),
-      new StockRecord('2', 'P1', 2, "CAT", "L"),
-      new StockRecord('3', 'P2', 1, "CAT", "L"),
-      new StockRecord('4', 'P2', 2, "CAT", "L"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
+      new StockRecord('3', 'P2', 1, "CAT", "L", "red"),
+      new StockRecord('4', 'P2', 2, "CAT", "L", "red"),
     ];
     options = {
       groupBy: {
@@ -53,7 +53,7 @@ describe('ReportStockResponse reports', () => {
       },
     };
     expected = [
-      new Stock('*', 6, "CAT", "*"),
+      new Stock('*', 6, "CAT", "*", "*"),
     ];
     let res = new ReportStockResponse(stockRecords, options);
     expect(res.records).toEqual(expected);
@@ -61,10 +61,10 @@ describe('ReportStockResponse reports', () => {
 
   test('given multiple records of different products (group by size), should return two stock records', () => {
     stockRecords = [
-      new StockRecord('1', 'P1', 1, "CAT", "L"),
-      new StockRecord('2', 'P1', 2, "CAT", "L"),
-      new StockRecord('3', 'P2', 1, "CAT", "M"),
-      new StockRecord('4', 'P2', 2, "CAT", "M"),
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
+      new StockRecord('3', 'P2', 1, "CAT", "M", "red"),
+      new StockRecord('4', 'P2', 2, "CAT", "M", "red"),
     ];
     options = {
       groupBy: {
@@ -72,8 +72,28 @@ describe('ReportStockResponse reports', () => {
       },
     };
     expected = [
-      new Stock('*', 3, "*", "L"),
-      new Stock('*', 3, "*", "M"),
+      new Stock('*', 3, "*", "L", "*"),
+      new Stock('*', 3, "*", "M", "*"),
+    ];
+    let res = new ReportStockResponse(stockRecords, options);
+    expect(res.records).toEqual(expected);
+  });
+
+  test('given multiple records of different products (group by color), should return two stock records', () => {
+    stockRecords = [
+      new StockRecord('1', 'P1', 1, "CAT", "L", "red"),
+      new StockRecord('2', 'P1', 2, "CAT", "L", "red"),
+      new StockRecord('3', 'P2', 1, "CAT", "M", "blue"),
+      new StockRecord('4', 'P2', 2, "CAT", "M", "blue"),
+    ];
+    options = {
+      groupBy: {
+        color: true,
+      },
+    };
+    expected = [
+      new Stock('*', 3, "*", "*", "red"),
+      new Stock('*', 3, "*", "*", "blue"),
     ];
     let res = new ReportStockResponse(stockRecords, options);
     expect(res.records).toEqual(expected);

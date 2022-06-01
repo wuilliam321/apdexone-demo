@@ -12,7 +12,7 @@ describe("StockListItem.vue", () => {
   // let deleteButton: Wrapper<Vue, Element>;
 
   beforeEach(() => {
-    const record = new StockRecord("1234", "P1", 10, "CAT", "L");
+    const record = new StockRecord("1234", "P1", 10, "CAT", "L", "red");
     records = [record];
     stockService = newStockServiceMock(records, []);
     wrapper = mount(StockListItem, {

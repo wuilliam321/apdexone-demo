@@ -148,16 +148,23 @@ class HttpServer {
 
       // TODO: not tested
       if (!req.body.category) {
-      //   res.status(400).send({ message: 'category is required' });
-      //   return;
-          req.body.category = 'none';
+        //   res.status(400).send({ message: 'category is required' });
+        //   return;
+        req.body.category = 'none';
       }
 
       // TODO: not tested
       if (!req.body.size) {
-      //   res.status(400).send({ message: 'size is required' });
-      //   return;
-          req.body.size = 'none';
+        //   res.status(400).send({ message: 'size is required' });
+        //   return;
+        req.body.size = 'none';
+      }
+      //
+      // TODO: not tested
+      if (!req.body.color) {
+        //   res.status(400).send({ message: 'color is required' });
+        //   return;
+        req.body.color = 'none';
       }
 
       let quantity = Number.parseInt(req.body.quantity);
@@ -166,7 +173,14 @@ class HttpServer {
         return;
       }
 
-      const body = new CreateStockRecordRequest(req.body.code, req.body.product_code, Number.parseInt(req.body.quantity, ), req.body.category, req.body.size);
+      const body = new CreateStockRecordRequest(
+        req.body.code,
+        req.body.product_code,
+        Number.parseInt(req.body.quantity),
+        req.body.category,
+        req.body.size,
+        req.body.color
+      );
       const [error, result] = this.stocksService!.create(body);
       if (error) {
         res.status(500).send({ message: error.message });

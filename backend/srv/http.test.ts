@@ -440,7 +440,7 @@ describe('StocksHttp Report', () => {
     handler(req, res);
 
     const expected = [
-      new Stock("P1", 10, "*", "*"),
+      new Stock("P1", 10, "*", "*", "*"),
     ] as Stock[];
 
     expect(res.status).toHaveBeenCalledWith(201);

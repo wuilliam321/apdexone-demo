@@ -34,7 +34,7 @@ export class ListStockResponse {
   constructor(public records: StockRecord[]) {}
 }
 
-export type GroupByReportStock = "product_code" | "category" | "size";
+export type GroupByReportStock = "product_code" | "category" | "size" | "color";
 
 export class ReportStockParams {
   constructor(public groupBy?: GroupByReportStock) {}

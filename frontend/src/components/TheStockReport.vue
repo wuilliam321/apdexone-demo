@@ -40,6 +40,18 @@
           @change="fetchStocks"
         />
       </div>
+      <label class="input-group-text" for="color">Color</label>
+      <div class="input-group-text">
+        <input
+          type="radio"
+          name="groupBy"
+          id="color"
+          class="form-check-input mt-0"
+          v-model="group"
+          value="color"
+          @change="fetchStocks"
+        />
+      </div>
     </div>
     <StockReportList :stocks="stocks" />
   </div>

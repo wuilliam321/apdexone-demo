@@ -12,6 +12,9 @@
     <td class="stock-report-item__size">
       {{ stock.size }}
     </td>
+    <td class="stock-report-item__color">
+      {{ stock.color }}
+    </td>
   </tr>
 </template>
 

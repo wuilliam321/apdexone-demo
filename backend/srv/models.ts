@@ -121,10 +121,11 @@ export type ReportStockOptions = {
     product_code?: boolean;
     category?: boolean;
     size?: boolean;
+    color?: boolean;
   },
 }
 
-export type GroupByReportStock = "product_code" | "category" | "size";
+export type GroupByReportStock = "product_code" | "category" | "size" | "color";
 
 export class ReportStockRequest {
   constructor(public groupBy?: GroupByReportStock) { }
@@ -151,6 +152,9 @@ export class ReportStockResponse {
         if (field === 'size' && enabled) {
           return this.bySize();
         }
+        if (field === 'color' && enabled) {
+          return this.byColor();
+        }
         // TODO: add more groupings
       }
     }
@@ -168,19 +172,25 @@ export class ReportStockResponse {
 
   private byProductCode(): Stock[] {
     return this._quantities.groupBy("product_code", ([productCode, quantities]): Stock => (
-      new Stock(productCode, this.sum(quantities), "*", "*")
+      new Stock(productCode, this.sum(quantities), "*", "*", "*")
     ));
   }
 
   private byCategory(): Stock[] {
     return this._quantities.groupBy("category", ([categoryField, quantities]): Stock => {
-      return new Stock('*', this.sum(quantities), categoryField, "*")
+      return new Stock('*', this.sum(quantities), categoryField, "*", "*")
     });
   }
 
   private bySize(): Stock[] {
     return this._quantities.groupBy("size", ([sizeField, quantities]): Stock => {
-      return new Stock('*', this.sum(quantities), "*", sizeField)
+      return new Stock('*', this.sum(quantities), "*", sizeField, "*")
+    });
+  }
+
+  private byColor(): Stock[] {
+    return this._quantities.groupBy("color", ([colorField, quantities]): Stock => {
+      return new Stock('*', this.sum(quantities), "*", "*", colorField)
     });
   }
 }
@@ -202,6 +212,7 @@ export class CreateStockRecordRequest {
     public quantity: number,
     public category: string,
     public size: string,
+    public color: string,
   ) { }
 
   toJSON(): Object {
@@ -210,6 +221,7 @@ export class CreateStockRecordRequest {
       quantity: this.quantity,
       category: this.category,
       size: this.size,
+      color: this.color,
     };
   }
 }

@@ -6,8 +6,8 @@ import StockReportListItem from "@/components/StockReportListItem.vue";
 describe("StockReportList.vue", () => {
   it("should render stock report list", () => {
     const stocks = [
-      new Stock("P1", 10, "CAT", "L"),
-      new Stock("P2", 10, "CAT", "L")
+      new Stock("P1", 10, "CAT", "L", "red"),
+      new Stock("P2", 10, "CAT", "L", "red")
     ];
     const wrapper = shallowMount(StockReportList, {
       propsData: { stocks },
