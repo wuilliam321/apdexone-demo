@@ -7,6 +7,7 @@
           <input
             type="text"
             name="code"
+            id="code"
             v-model="productForSave.code"
             class="form-control"
             aria-describedby="codeHelp"
@@ -21,6 +22,7 @@
           <input
             type="text"
             name="name"
+            id="name"
             v-model="productForSave.name"
             class="form-control"
             aria-describedby="nameHelp"
@@ -35,6 +37,7 @@
           <input
             type="number"
             name="price"
+            id="price"
             v-model="productForSave.price"
             class="form-control"
             aria-describedby="priceHelp"
